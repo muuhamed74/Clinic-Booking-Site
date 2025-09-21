@@ -1,0 +1,17 @@
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Clinic.Service.deps.json
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Clinic.Service.dll
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Clinic.Service.pdb
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Clinic.Domain.dll
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Service Abstraction.dll
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Service Abstraction.pdb
+E:\Coding\Clinic booking site\Clinic.Service\bin\Debug\net8.0\Clinic.Domain.pdb
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.csproj.AssemblyReference.cache
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.GeneratedMSBuildEditorConfig.editorconfig
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.AssemblyInfoInputs.cache
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.AssemblyInfo.cs
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.csproj.CoreCompileInputs.cache
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.S.D4D87BC0.Up2Date
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.dll
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\refint\Clinic.Service.dll
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.pdb
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\ref\Clinic.Service.dll

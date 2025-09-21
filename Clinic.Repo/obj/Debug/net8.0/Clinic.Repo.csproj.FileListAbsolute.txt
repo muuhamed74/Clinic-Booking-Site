@@ -1,0 +1,17 @@
+E:\Coding\Clinic booking site\Clinic.Repo\bin\Debug\net8.0\Clinic.Repo.deps.json
+E:\Coding\Clinic booking site\Clinic.Repo\bin\Debug\net8.0\Clinic.Repo.runtimeconfig.json
+E:\Coding\Clinic booking site\Clinic.Repo\bin\Debug\net8.0\Clinic.Repo.dll
+E:\Coding\Clinic booking site\Clinic.Repo\bin\Debug\net8.0\Clinic.Repo.pdb
+E:\Coding\Clinic booking site\Clinic.Repo\bin\Debug\net8.0\Clinic.Domain.dll
+E:\Coding\Clinic booking site\Clinic.Repo\bin\Debug\net8.0\Clinic.Domain.pdb
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.csproj.AssemblyReference.cache
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.GeneratedMSBuildEditorConfig.editorconfig
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.AssemblyInfoInputs.cache
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.AssemblyInfo.cs
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.csproj.CoreCompileInputs.cache
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.R.20D74A2B.Up2Date
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.dll
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\refint\Clinic.Repo.dll
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.pdb
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\Clinic.Repo.genruntimeconfig.cache
+E:\Coding\Clinic booking site\Clinic.Repo\obj\Debug\net8.0\ref\Clinic.Repo.dll
