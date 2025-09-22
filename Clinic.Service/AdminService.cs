@@ -245,8 +245,7 @@ namespace Clinic.Service
                 }
                 await _unitOfWork.CompleteAsync();
                 await transaction.CommitAsync();
-
-                await _notificationService.SendStatusChangedAsync(appointment);
+               
                 foreach (var appt in sameDayAppointments)
                 {
                     await _notificationService.SendStatusChangedAsync(appt);

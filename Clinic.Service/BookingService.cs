@@ -66,6 +66,8 @@ namespace Clinic.Service
 
                     bookingDateEgypt = DateTime.SpecifyKind(request.BookingDate.Date, DateTimeKind.Unspecified);
                     bookingDateUtc = TimeZoneInfo.ConvertTimeToUtc(bookingDateEgypt, egyptZone);
+                    if (bookingDateUtc.Date < bookingDateEgypt.Date)
+                        bookingDateUtc = bookingDateUtc.AddDays(1);
 
                     Console.WriteLine("---- Booking Debug ----");
                     Console.WriteLine($"Now (UTC): {nowUtc}, Kind: {nowUtc.Kind}");
