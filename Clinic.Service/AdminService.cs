@@ -202,10 +202,11 @@ namespace Clinic.Service
             try
             {
                 var egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-                var newUtcTime = DateTime.SpecifyKind(requestDto.NewTime, DateTimeKind.Utc);
-                var newEgyptTime = TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, egyptZone);
-
+                var newEgyptTime = DateTime.SpecifyKind(requestDto.NewTime, DateTimeKind.Unspecified);
+                var newUtcTime = TimeZoneInfo.ConvertTimeToUtc(newEgyptTime, egyptZone);
                 var appointmentDate = TimeZoneInfo.ConvertTimeFromUtc(appointment.EstimatedTime.Value, egyptZone).Date;
+
+
                 if (newEgyptTime.Date != appointmentDate)
                     throw new InvalidOperationException("لا يمكن تغيير المعاد ليوم مختلف.");
 
