@@ -360,6 +360,8 @@ namespace Clinic.Service
 
             DateTime dateEgypt = DateTime.SpecifyKind(request.Date.Date, DateTimeKind.Unspecified);
             DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgypt, egyptZone);
+            if (dateUtc.Date < dateEgypt.Date)
+                dateUtc = dateUtc.AddDays(1);
 
             var overrideEntity = await bookingOverrideRepo
                 .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
