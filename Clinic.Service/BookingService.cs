@@ -243,6 +243,9 @@ namespace Clinic.Service
             TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
             DateTime dateEgypt = DateTime.SpecifyKind(date.Date, DateTimeKind.Unspecified);
             DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgypt, egyptZone);
+            if (dateUtc.Date < dateEgypt.Date)
+                dateUtc = dateUtc.AddDays(1);
+
             var spec = new AppointmentByDateAndPhoneSpecification(phoneNumber , dateUtc);
             var appointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(spec);
             var dto = _mapper.Map<AppointmentDto?>(appointment);
