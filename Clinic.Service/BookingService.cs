@@ -133,10 +133,12 @@ namespace Clinic.Service
 
 
                     // clinic working hours in egypt time zone
-                    var clinicOpenEgypt = bookingDateEgypt.Add(clinicStart);
+                    var clinicOpenEgypt = bookingDateEgypt.Date.Add(clinicStart);
                     clinicOpenUtc = TimeZoneInfo.ConvertTimeToUtc(clinicOpenEgypt, egyptZone);
                     var clinicCloseEgypt = bookingDateEgypt.Add(clinicEnd);
                     clinicCloseUtc = TimeZoneInfo.ConvertTimeToUtc(clinicCloseEgypt, egyptZone);
+                    startTimeEgypt = clinicOpenEgypt; 
+                    startTimeUtc = TimeZoneInfo.ConvertTimeToUtc(startTimeEgypt, egyptZone);
 
                     if (bookingDateEgypt.Date == nowEgypt.Date)
                     {
