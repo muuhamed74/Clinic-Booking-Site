@@ -95,7 +95,7 @@ namespace Clinic.Service
                         var existingAppointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(existingAppointmentSpec);
 
                         if (existingAppointment != null)
-                            throw new InvalidOperationException("لا يمكنك الحجز أكثر من مرة في نفس اليوم.");
+                            throw new ArgumentException("لا يمكنك الحجز أكثر من مرة في نفس اليوم.");
                     }
                     else
                     {
@@ -104,6 +104,8 @@ namespace Clinic.Service
                         await _unitOfWork.Reposit<Patient>().AddAsync(patient);
                         await _unitOfWork.CompleteAsync();
                     }
+
+
                     #endregion
 
 
@@ -118,7 +120,7 @@ namespace Clinic.Service
                     // For Closed Days
                     if (overrideSetting != null && overrideSetting.IsClosed)
                     {
-                        throw new InvalidOperationException("لا يمكن الحجز في هذا اليوم لأنه مغلق من قبل الدكتور.");
+                        throw new ArgumentException("لا يمكن الحجز في هذا اليوم لأنه مغلق من قبل الدكتور.");
                     }
 
                     // check if doctor update the time or not 
@@ -191,7 +193,7 @@ namespace Clinic.Service
 
                     estimatedTimeUtc = TimeZoneInfo.ConvertTimeToUtc(estimatedTimeEgypt, egyptZone);
                     if (estimatedTimeUtc >= clinicCloseUtc)
-                        throw new Exception("لا يوجد مواعيد متاحة في هذا اليوم.");
+                        throw new ArgumentException("لا يوجد مواعيد متاحة في هذا اليوم.");
                     #endregion
 
 
