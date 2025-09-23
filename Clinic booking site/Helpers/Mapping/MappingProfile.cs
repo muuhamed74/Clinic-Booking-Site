@@ -33,7 +33,8 @@ namespace Clinic_booking_site.Helpers.Mapping
 
             CreateMap<AppointmentDto, Appointment>()
                  .ForMember(dest => dest.Status, opt => opt.MapFrom(src => Enum.Parse<AppointmentStatus>(src.Status)))
-                 .ForMember(dest => dest.EstimatedTime, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeToUtc(src.EstimatedTime, egyptZone)));
+                 .ForMember(dest => dest.EstimatedTime, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeToUtc(src.EstimatedTime, egyptZone)))
+                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeToUtc(src.Date, egyptZone)));
 
             CreateMap<BookingOverride, BookingOverrideDto>().ReverseMap()
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeFromUtc(src.Date.Value, egyptZone).ToString("yyyy-MM-dd")))
