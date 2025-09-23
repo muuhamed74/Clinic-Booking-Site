@@ -249,14 +249,7 @@ namespace Clinic.Service
             var spec = new AppointmentByDateAndPhoneSpecification(phoneNumber , dateUtc);
             var appointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(spec);
             var dto = _mapper.Map<AppointmentDto?>(appointment);
-            if (dto != null)
-            {
-                dto.Date = TimeZoneInfo.ConvertTimeFromUtc(dto.Date, egyptZone);
-                dto.EstimatedTime = TimeZoneInfo.ConvertTimeFromUtc(dto.EstimatedTime, egyptZone);
-            }
-            return dto;
-
-
+            return dto ?? throw new KeyNotFoundException("لا يوجد حجز بهذا الرقم في هذا اليوم.");
         }
     }
 }
