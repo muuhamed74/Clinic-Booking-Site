@@ -88,7 +88,6 @@ namespace Clinic.Service
                     #region Check Patient Existence
                     var patientSpec = new PatientByPhoneSpecification(request.Phone);
                     var patient = await _unitOfWork.Reposit<Patient>().GetEntityWithSpec(patientSpec);
-
                     if (patient != null)
                     {
                         var existingAppointmentSpec = new AppointmentByDateAndPhoneSpecification(request.Phone, bookingDateUtc);
@@ -200,7 +199,7 @@ namespace Clinic.Service
                     #region Make The Appointment and sending Notification
                     var appointment = _mapper.Map<Appointment>(request);    
                     appointment.PatientId = patient.Id;
-                    appointment.PatientName = patient.Name;   
+                    appointment.PatientName = request.Name;   
                     appointment.Phone = patient.Phone;
                     appointment.QueueNumber = queueNumber;
                     appointment.Status = AppointmentStatus.Waiting;
