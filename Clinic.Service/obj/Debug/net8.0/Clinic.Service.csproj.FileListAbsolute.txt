@@ -10,6 +10,7 @@ E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.Gen
 E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.AssemblyInfoInputs.cache
 E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.AssemblyInfo.cs
 E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.csproj.CoreCompileInputs.cache
+E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.sourcelink.json
 E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.S.D4D87BC0.Up2Date
 E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\Clinic.Service.dll
 E:\Coding\Clinic booking site\Clinic.Service\obj\Debug\net8.0\refint\Clinic.Service.dll

@@ -36,6 +36,11 @@ namespace Clinic.Repo.Configurations
             builder.HasMany(a => a.Notifications)
                    .WithOne(n => n.Appointment)
                    .HasForeignKey(n => n.AppointmentId);
+
+            builder.HasOne(a => a.Patient)
+                  .WithMany(p => p.Appointments)
+                  .HasForeignKey(a => a.PatientId)
+                  .OnDelete(DeleteBehavior.Cascade); 
         }
     }
 }

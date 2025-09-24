@@ -14,8 +14,8 @@ namespace Clinic_booking_site.Helpers.Mapping
         {
 
             CreateMap<Appointment, AppointmentDto>()
-                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.Name))
-                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Patient.Phone))
+                .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.PatientName))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                 .ForMember(dest => dest.EstimatedTime, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeFromUtc(src.EstimatedTime.Value, egyptZone)));
 

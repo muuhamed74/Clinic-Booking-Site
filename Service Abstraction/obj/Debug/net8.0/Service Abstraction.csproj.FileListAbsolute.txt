@@ -8,6 +8,7 @@ E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service Abstr
 E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service Abstraction.AssemblyInfoInputs.cache
 E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service Abstraction.AssemblyInfo.cs
 E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service Abstraction.csproj.CoreCompileInputs.cache
+E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service Abstraction.sourcelink.json
 E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service .9D489B17.Up2Date
 E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\Service Abstraction.dll
 E:\Coding\Clinic booking site\Service Abstraction\obj\Debug\net8.0\refint\Service Abstraction.dll

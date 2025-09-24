@@ -6,6 +6,7 @@ E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.Gener
 E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.AssemblyInfoInputs.cache
 E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.AssemblyInfo.cs
 E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.csproj.CoreCompileInputs.cache
+E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.sourcelink.json
 E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.dll
 E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\refint\Clinic.Domain.dll
 E:\Coding\Clinic booking site\Clinic.Domain\obj\Debug\net8.0\Clinic.Domain.pdb
