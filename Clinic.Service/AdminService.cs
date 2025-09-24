@@ -401,6 +401,34 @@ namespace Clinic.Service
         }
 
 
+        public async Task ToggleClinicDayStatusAsync(ChangeClinicDayStatusDto request)
+        {
+            TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+            var bookingOverrideRepo = _unitOfWork.Reposit<BookingOverride>();
+            DateTime dateEgypt = DateTime.SpecifyKind(request.Date.Date, DateTimeKind.Unspecified);
+            DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgypt, egyptZone);
+
+            var overrideEntity = await bookingOverrideRepo
+                .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
+            if (overrideEntity == null)
+            {
+                overrideEntity = new BookingOverride
+                {
+                    Date = dateUtc,
+                    ClinicStartTime = _settings.Value.ClinicStartTime,
+                    ClinicEndTime = _settings.Value.ClinicEndTime,
+                    IsClosed = request.IsClosed
+                };
+                await bookingOverrideRepo.AddAsync(overrideEntity);
+            }
+            else
+            {
+                overrideEntity.IsClosed = request.IsClosed;
+                bookingOverrideRepo.Update(overrideEntity);
+            }
+            await _unitOfWork.CompleteAsync();
+        }
+
 
 
 

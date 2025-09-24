@@ -136,7 +136,7 @@ namespace Clinic.Service
                     // For Closed Days
                     if (overrideSetting != null && overrideSetting.IsClosed)
                     {
-                        throw new ArgumentException("لا يمكن الحجز في هذا اليوم لأنه مغلق من قبل الدكتور.");
+                        throw new ArgumentException("لا يمكن الحجز في هذا اليوم لأنه مغلق .");
                     }
 
                     // check if doctor update the time or not 

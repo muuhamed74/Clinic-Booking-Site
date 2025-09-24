@@ -121,5 +121,20 @@ namespace Clinic_booking_site.Controllers
 
             return Ok(new { Message = message });
         }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("toggle-clinic-day-status")]
+        public async Task<IActionResult> ToggleClinicDayStatus([FromBody] ChangeClinicDayStatusDto request)
+        {
+             await _adminService.ToggleClinicDayStatusAsync(request);
+            string message = request.IsClosed
+                ? "تم إغلاق اليوم بنجاح وتم منع الحجوزات الجديدة."
+                : "تم فتح اليوم بنجاح وأصبح متاحًا للحجوزات.";
+            return Ok(new { Message = message });
+        }
+
+
+
     }
 }
