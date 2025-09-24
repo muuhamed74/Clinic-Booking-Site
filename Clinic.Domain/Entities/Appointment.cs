@@ -17,7 +17,7 @@ namespace Clinic.Domain.Entities
         public AppointmentStatus Status { get; set; } = AppointmentStatus.Waiting; // Pending / Cancelled / Completed  / InProgress
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-
+        public AppointmentType AppointmentType { get; set; }
 
         public string? PatientName { get; set; }
         public string? Phone { get; set; }

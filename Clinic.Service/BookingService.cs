@@ -40,6 +40,7 @@ namespace Clinic.Service
             //   غيرها لـ "Africa/Cairo" اما تيجي تشغل الدوكر
             TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
             const int maxRetries = 3;
+            const int maxContractsPerDay = 5;
             int attempt = 0;
             int queueNumber = 1;
 
@@ -82,6 +83,22 @@ namespace Clinic.Service
 
                     if (bookingDateEgypt.Date > tomorrowEgypt)
                         throw new ArgumentException("يمكنك الحجز لليوم الحالي أو الغد فقط.");
+                    #endregion
+
+
+                    #region  Validate and Check AppointmentType
+                    if (!Enum.IsDefined(typeof(AppointmentType), request.AppointmentType))
+                        throw new ArgumentException("نوع الموعد يجب أن يكون Checkup أو Contract.");
+
+
+                    if (request.AppointmentType == AppointmentType.Contract)
+                    {
+                        var AppTypspec = new AppointmentByDateSpecification(bookingDateUtc);
+                        var todaysAppointmentsTypes = await _unitOfWork.Reposit<Appointment>().ListAsync(AppTypspec);
+                        int contractCount = todaysAppointmentsTypes.Count(a => a.AppointmentType == AppointmentType.Contract);
+                        if (contractCount >= maxContractsPerDay)
+                            throw new ArgumentException("عدد التعاقدات لليوم ممتلئ. يرجى اختيار موعد كشف أو يوم آخر.");
+                    }
                     #endregion
 
 
@@ -205,6 +222,7 @@ namespace Clinic.Service
                     appointment.Status = AppointmentStatus.Waiting;
                     appointment.EstimatedTime = estimatedTimeUtc;  
                     appointment.Date = bookingDateUtc;
+                    appointment.AppointmentType = request.AppointmentType;
 
 
 

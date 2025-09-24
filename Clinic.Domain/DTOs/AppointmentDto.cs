@@ -15,5 +15,6 @@ namespace Clinic.Domain.DTOs
         public int QueueNumber { get; set; }
         public DateTime EstimatedTime { get; set; }
         public string Status { get; set; } = null!;
+        public string AppointmentType { get; set; } = null!;
     }
 }

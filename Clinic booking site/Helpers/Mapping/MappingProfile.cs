@@ -17,6 +17,7 @@ namespace Clinic_booking_site.Helpers.Mapping
                 .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.PatientName))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.AppointmentType, opt => opt.MapFrom(src => src.AppointmentType.ToString()))
                 .ForMember(dest => dest.EstimatedTime, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeFromUtc(src.EstimatedTime.Value, egyptZone)));
 
 
