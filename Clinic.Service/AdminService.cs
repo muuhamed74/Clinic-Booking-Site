@@ -195,7 +195,7 @@ namespace Clinic.Service
                 .GetEntityWithSpec(new AppointmentByIdWithPatientSpecification(requestDto.AppointmentId));
 
             if (appointment == null)
-                throw new KeyNotFoundException("Appointment not found");
+                throw new ArgumentException("Appointment not found");
 
             await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
 
@@ -208,7 +208,7 @@ namespace Clinic.Service
 
 
                 if (newEgyptTime.Date != appointmentDate)
-                    throw new InvalidOperationException("لا يمكن تغيير المعاد ليوم مختلف.");
+                    throw new ArgumentException("لا يمكن تغيير المعاد ليوم مختلف.");
 
 
                 var clinicOpenTime = new TimeSpan(11, 30, 0); // 11:30 AM

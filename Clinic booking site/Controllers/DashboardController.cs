@@ -97,6 +97,7 @@ namespace Clinic_booking_site.Controllers
         [HttpPut("reschedule")]
         public async Task<ActionResult<AppointmentDto>> Reschedule([FromBody] RescheduleAppointmentRequestDto requestDto)
         {
+            Console.WriteLine($"Received Reschedule request for appointmentId: {requestDto.AppointmentId} at {DateTime.UtcNow}");
             var result = await _adminService.RescheduleAppointmentAsync(requestDto);
             return Ok(result);
         }
@@ -109,6 +110,7 @@ namespace Clinic_booking_site.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("change-day-status")]
         public async Task<IActionResult> CloseClinicDay([FromBody] ChangeClinicDayStatusDto request)
         {

@@ -43,7 +43,7 @@ namespace Clinic.Service
                         await SendInternalAsync(
                             appointment,
                             $"تم الحجز بنجاح 🎉\n" +
-                            $"الاسم: {appointment.Patient.Name}\n" +
+                            $"الاسم: {appointment.PatientName}\n" +
                             $"الدور: {appointment.QueueNumber}\n" +
                             $"الوقت المتوقع: {estimatedTimeEgypt:HH:mm tt}\n",
                             NotificationType.BookingConfirmation
@@ -60,7 +60,7 @@ namespace Clinic.Service
                             appointment,
                             $"تنويه ❌\n" +
                             $"عذراً، تم إلغاء حجزك بتاريخ {dateEgypt:d}.\n" +
-                            $"الاسم: {appointment.Patient.Name}\n" +
+                            $"الاسم: {appointment.PatientName}\n" +
                             $"رقم الدور: {appointment.QueueNumber}.",
                             NotificationType.Cancellation
                             );
@@ -71,7 +71,7 @@ namespace Clinic.Service
                         appointment,
                         $"تنويه ⚠️\n" +
                         $"تم تغيير موعدك.\n" +
-                        $"الاسم: {appointment.Patient.Name}\n" +
+                        $"الاسم: {appointment.PatientName}\n" +
                         $"الدور الجديد: {appointment.QueueNumber}\n" +
                         $"الوقت المتوقع الجديد: {estimatedTimeEgypt:HH:mm tt}.",
                         NotificationType.Rescheduling
@@ -97,7 +97,7 @@ namespace Clinic.Service
             await SendInternalAsync(
                 appointment,
                 $"تذكير ⏰\n" +
-                $"الاسم: {appointment.Patient.Name}\n" +
+                $"الاسم: {appointment.PatientName}\n" +
                 $"موعدك سيبدأ قريبا , تقريباً في تمام {estimatedTimeEgypt:HH:mm tt}.",
                 NotificationType.Reminder
                 );
