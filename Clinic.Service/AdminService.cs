@@ -320,29 +320,48 @@ namespace Clinic.Service
                     var clinicCloseUtc = TimeZoneInfo.ConvertTimeToUtc(clinicCloseEgypt, egyptZone);
                     var minutesPerCase = _settings.Value.MinutesPerCase;
                     var currentTimeUtc = clinicOpenUtc;
-
-                    foreach (var appt in todaysAppointments.OrderBy(a => a.QueueNumber))
+                    if (currentTimeUtc > clinicCloseUtc) 
                     {
-                        if (currentTimeUtc >= clinicCloseUtc)
+                        foreach (var appt in todaysAppointments)
                         {
-                            appt.Status = AppointmentStatus.Cancelled;
+                            if (appt.Status != AppointmentStatus.Cancelled) 
+                            {
+                                appt.Status = AppointmentStatus.Cancelled;
+                                _unitOfWork.Reposit<Appointment>().Update(appt);
+                            }
                         }
-                        else
+                    }
+                    else 
+                    {
+                        var appminutesPerCase = _settings.Value.MinutesPerCase;
+                        var currentTimeUtcAdjusted = clinicOpenUtc;
+                        foreach (var appt in todaysAppointments.OrderBy(a => a.QueueNumber))
                         {
-                            appt.EstimatedTime = currentTimeUtc;
-                            appt.Status = AppointmentStatus.Rescheduled;
+                            if (currentTimeUtcAdjusted >= clinicCloseUtc || currentTimeUtcAdjusted > currentTimeUtc)
+                            {
+                                if (appt.Status != AppointmentStatus.Cancelled)
+                                {
+                                    appt.Status = AppointmentStatus.Cancelled;
+                                    _unitOfWork.Reposit<Appointment>().Update(appt);
+                                }
+                            }
+                            else
+                            {
+                                appt.EstimatedTime = currentTimeUtcAdjusted;
+                                appt.Status = AppointmentStatus.Rescheduled;
+                                _unitOfWork.Reposit<Appointment>().Update(appt);
+                                currentTimeUtcAdjusted = currentTimeUtcAdjusted.AddMinutes(appminutesPerCase);
+                            }
                         }
-                        _unitOfWork.Reposit<Appointment>().Update(appt);
-                        currentTimeUtc = currentTimeUtc.AddMinutes(minutesPerCase);
                     }
                     await _unitOfWork.CompleteAsync();
-
-                    foreach (var appt in todaysAppointments)
+                    foreach (var appt in todaysAppointments.Where(
+                            a => a.Status == AppointmentStatus.Cancelled 
+                            || a.Status == AppointmentStatus.Rescheduled))
                     {
                         await _notificationService.SendStatusChangedAsync(appt);
                     }
                 }
-
                 await transaction.CommitAsync();
 
                 var dto = _mapper.Map<BookingOverrideDto>(entity);
