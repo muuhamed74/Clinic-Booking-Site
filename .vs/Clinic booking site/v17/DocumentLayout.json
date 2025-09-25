@@ -87,8 +87,7 @@
               "RelativeToolTip": "Clinic booking site\\Controllers\\DashboardController.cs",
               "ViewState": "AgIAAEMAAAAAAAAAAAAQwHsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-24T18:54:15.867Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-24T18:54:15.867Z"
             },
             {
               "$type": "Document",
@@ -112,8 +111,7 @@
               "RelativeToolTip": "Clinic booking site\\Helpers\\Mapping\\MappingProfile.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAAADAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-21T21:31:01.326Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-21T21:31:01.326Z"
             },
             {
               "$type": "Document",
@@ -125,8 +123,7 @@
               "RelativeToolTip": "Clinic.Service\\AdminService.cs",
               "ViewState": "AgIAACIAAAAAAAAAAAAQwCwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-21T21:29:48.907Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-21T21:29:48.907Z"
             },
             {
               "$type": "Document",
@@ -136,7 +133,7 @@
               "RelativeDocumentMoniker": "Clinic.Service\\BookingService.cs",
               "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\BookingService.cs",
               "RelativeToolTip": "Clinic.Service\\BookingService.cs",
-              "ViewState": "AgIAANEAAAAAAAAAAAAkwOMAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAPoAAAAAAAAAAAAuwAkBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-19T20:40:06.487Z",
               "EditorCaption": ""

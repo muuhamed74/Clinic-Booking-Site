@@ -13,6 +13,7 @@ using Clinic.Domain.Specifications.Clinic.Specifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Service_Abstraction;
+using Twilio.Http;
 
 namespace Clinic.Service
 {
@@ -259,8 +260,7 @@ namespace Clinic.Service
         public async Task<AppointmentDto?> GetAppointmentByPhoneAsync(string phoneNumber, DateTime date)
         {
             TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-            DateTime dateEgypt = DateTime.SpecifyKind(date.Date, DateTimeKind.Unspecified);
-            DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgypt, egyptZone);
+            DateTime dateUtc = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
             //if (dateUtc.Date < dateEgypt.Date)
             //    dateUtc = dateUtc.AddDays(1);
 
