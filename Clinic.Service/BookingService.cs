@@ -66,8 +66,7 @@ namespace Clinic.Service
                     var tomorrowEgypt = todayEgypt.AddDays(1);
 
                     bookingDateEgypt = DateTime.SpecifyKind(request.BookingDate.Date, DateTimeKind.Unspecified);
-                    bookingDateUtc = TimeZoneInfo.ConvertTimeToUtc(bookingDateEgypt, egyptZone);
-                    //if (bookingDateUtc.Date < bookingDateEgypt.Date)
+                    bookingDateUtc = DateTime.SpecifyKind(request.BookingDate.Date, DateTimeKind.Utc);                    //if (bookingDateUtc.Date < bookingDateEgypt.Date)
                     //    bookingDateUtc = bookingDateUtc.AddDays(1);
 
                     Console.WriteLine("---- Booking Debug ----");
@@ -221,7 +220,7 @@ namespace Clinic.Service
                     appointment.QueueNumber = queueNumber;
                     appointment.Status = AppointmentStatus.Waiting;
                     appointment.EstimatedTime = estimatedTimeUtc;  
-                    appointment.Date = bookingDateUtc;
+                    appointment.Date = bookingDateUtc.Date;
                     appointment.AppointmentType = request.AppointmentType;
 
 
@@ -262,8 +261,8 @@ namespace Clinic.Service
             TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
             DateTime dateEgypt = DateTime.SpecifyKind(date.Date, DateTimeKind.Unspecified);
             DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgypt, egyptZone);
-            if (dateUtc.Date < dateEgypt.Date)
-                dateUtc = dateUtc.AddDays(1);
+            //if (dateUtc.Date < dateEgypt.Date)
+            //    dateUtc = dateUtc.AddDays(1);
 
             var spec = new AppointmentByDateAndPhoneSpecification(phoneNumber , dateUtc);
             var appointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(spec);
