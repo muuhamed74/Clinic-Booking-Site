@@ -227,11 +227,16 @@ namespace Clinic.Service
                 var allAppointmentsToday = await _unitOfWork.Reposit<Appointment>()
                     .GetAllWithSpecAsync(new AppointmentsWithPatientsSpecification());
 
+
+                //error here 
+                //الترتيب غلط هنا محتاج اخليه يرتب للي بعده بس مش ال في ال  que كله
+                // a.QueueNumber > appointment.QueueNumber هتتاكد انها تجيب المواعيد الي بعده
                 var sameDayAppointments = allAppointmentsToday
                           .Where(a =>
                               TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone).Date == appointmentDate &&
                               a.Id != appointment.Id &&
-                              (a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled))
+                              (a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled) &&
+                              a.QueueNumber > appointment.QueueNumber)
                           .OrderBy(a => a.QueueNumber)
                           .ToList();
 
