@@ -342,6 +342,7 @@ namespace Clinic.Service
                                 if (appt.Status != AppointmentStatus.Cancelled)
                                 {
                                     appt.Status = AppointmentStatus.Cancelled;
+                                    await _notificationService.SendStatusChangedAsync(appt);
                                     _unitOfWork.Reposit<Appointment>().Delete(appt);
                                 }
                             }
@@ -350,6 +351,7 @@ namespace Clinic.Service
                                 appt.EstimatedTime = currentTimeUtcAdjusted;
                                 if (appt.Status != AppointmentStatus.Rescheduled)
                                     appt.Status = AppointmentStatus.Rescheduled;
+                                    await _notificationService.SendStatusChangedAsync(appt);
                                 _unitOfWork.Reposit<Appointment>().Update(appt);
                                 currentTimeUtcAdjusted = currentTimeUtcAdjusted.AddMinutes(minutesPerCase);
                             }
@@ -362,6 +364,7 @@ namespace Clinic.Service
                         foreach (var appt in appointmentsToCancel)
                         {
                             appt.Status = AppointmentStatus.Cancelled;
+                            await _notificationService.SendStatusChangedAsync(appt);
                             _unitOfWork.Reposit<Appointment>().Delete(appt);
                         }
                     }
@@ -372,27 +375,23 @@ namespace Clinic.Service
                             if (appt.Status != AppointmentStatus.Cancelled)
                             {
                                 appt.Status = AppointmentStatus.Cancelled;
+                                await _notificationService.SendStatusChangedAsync(appt);
                                 _unitOfWork.Reposit<Appointment>().Delete(appt);
                             }
                         }
                     }
 
                     await _unitOfWork.CompleteAsync();
-                    foreach (var appt in todaysAppointments.Where(a =>
-                    a.Status == AppointmentStatus.Cancelled 
-                    || a.Status == AppointmentStatus.Rescheduled))
-                    {
-                        await _notificationService.SendStatusChangedAsync(appt);
-                    }
                 }
                 await transaction.CommitAsync();
                 var dto = _mapper.Map<BookingOverrideDto>(entity);
                 dto.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
                 return dto;
             }
-            catch
+            catch(Exception ex)
             {
                 await transaction.RollbackAsync();
+                Console.WriteLine($"Transaction failed: {ex.Message}");
                 throw;
             }
         }
