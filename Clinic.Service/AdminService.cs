@@ -346,7 +346,9 @@ namespace Clinic.Service
                             }
                             else
                             {
-                                appt.EstimatedTime = currentTimeUtcAdjusted;
+                                if (appt.EstimatedTime.Value < clinicOpenUtc 
+                                    || appt.EstimatedTime.Value != currentTimeUtcAdjusted)
+                                    appt.EstimatedTime = currentTimeUtcAdjusted;
                                 if (appt.Status != AppointmentStatus.Rescheduled)
                                     appt.Status = AppointmentStatus.Rescheduled;
                                     await _notificationService.SendStatusChangedAsync(appt);
