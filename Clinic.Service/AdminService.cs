@@ -321,6 +321,8 @@ namespace Clinic.Service
                     var minutesPerCase = _settings.Value.MinutesPerCase;
                     var currentTimeUtc = DateTime.UtcNow;
 
+                    var isCurrentDay = dateUtc.Date == DateTime.UtcNow.Date;
+
                     var validAppointments = todaysAppointments
                         .Where(a => a.EstimatedTime.HasValue && a.EstimatedTime.Value < clinicCloseUtc)
                         .OrderBy(a => a.EstimatedTime.Value)
@@ -333,7 +335,9 @@ namespace Clinic.Service
 
                         foreach (var appt in validAppointments)
                         {
-                            if (currentTimeUtcAdjusted > clinicCloseUtc || currentTimeUtcAdjusted > currentTimeUtc)
+                            if (isCurrentDay &&
+                                currentTimeUtcAdjusted > clinicCloseUtc 
+                                || currentTimeUtcAdjusted > currentTimeUtc)
                             {
                                 if (appt.Status != AppointmentStatus.Cancelled)
                                 {
@@ -352,7 +356,7 @@ namespace Clinic.Service
                         }
                         var appointmentsToCancel = todaysAppointments
                        .Where(a => !validAppointments.Contains(a) 
-                       || a.EstimatedTime >= clinicCloseUtc
+                       || isCurrentDay && a.EstimatedTime >= clinicCloseUtc
                        || a.EstimatedTime > currentTimeUtc)
                        .Where(a => a.Status != AppointmentStatus.Cancelled);
                         foreach (var appt in appointmentsToCancel)
@@ -361,7 +365,7 @@ namespace Clinic.Service
                             _unitOfWork.Reposit<Appointment>().Delete(appt);
                         }
                     }
-                    else if (currentTimeUtc > clinicCloseUtc)
+                    else if (isCurrentDay && currentTimeUtc > clinicCloseUtc)
                     {
                         foreach (var appt in todaysAppointments)
                         {
@@ -374,8 +378,9 @@ namespace Clinic.Service
                     }
 
                     await _unitOfWork.CompleteAsync();
-                    foreach (var appt in todaysAppointments.Where(a => a.Status == AppointmentStatus.Cancelled 
-                                                           || a.Status == AppointmentStatus.Rescheduled))
+                    foreach (var appt in todaysAppointments.Where(a =>
+                    a.Status == AppointmentStatus.Cancelled 
+                    || a.Status == AppointmentStatus.Rescheduled))
                     {
                         await _notificationService.SendStatusChangedAsync(appt);
                     }
