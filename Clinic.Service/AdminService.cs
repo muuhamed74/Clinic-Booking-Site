@@ -275,10 +275,8 @@ namespace Clinic.Service
             try
             {
                 TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-                DateTime dateEgypt = DateTime.SpecifyKind(request.Date.Value.Date, DateTimeKind.Unspecified);
-                DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgypt, egyptZone);
-                if(dateUtc.Date < dateEgypt.Date)
-                    dateUtc = dateUtc.AddDays(1);
+                DateTime dateUtc = DateTime.SpecifyKind(request.Date.Value, DateTimeKind.Utc);
+                DateTime dateEgypt = TimeZoneInfo.ConvertTimeFromUtc(dateUtc, egyptZone).Date;  
 
                 var existingOverride = await _unitOfWork.Reposit<BookingOverride>()
                         .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
