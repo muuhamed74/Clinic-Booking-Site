@@ -330,12 +330,11 @@ namespace Clinic.Service
                     {
                         var firstValidTimeUtc = validAppointments.First().EstimatedTime.Value;
                         var currentTimeUtcAdjusted = firstValidTimeUtc;
+                        int appointmentIndex = 0;
 
-                        foreach (var appt in validAppointments)
+                        foreach (var appt in validAppointments.ToList())
                         {
-                            if (isCurrentDay &&
-                                currentTimeUtcAdjusted > clinicCloseUtc 
-                                || currentTimeUtcAdjusted > currentTimeUtc)
+                            if (isCurrentDay && (currentTimeUtcAdjusted > clinicCloseUtc || currentTimeUtcAdjusted > currentTimeUtc))
                             {
                                 if (appt.Status != AppointmentStatus.Cancelled)
                                 {
@@ -346,31 +345,29 @@ namespace Clinic.Service
                             }
                             else
                             {
-                                if (appt.EstimatedTime.Value < clinicOpenUtc 
-                                    || appt.EstimatedTime.Value != currentTimeUtcAdjusted)
+                                var expectedTime = clinicOpenUtc.AddMinutes(appointmentIndex * minutesPerCase);
+                                bool needsRescheduling = appt.EstimatedTime.Value < clinicOpenUtc ||
+                                                       Math.Abs((appt.EstimatedTime.Value - expectedTime).TotalMinutes) > minutesPerCase / 2;
+
+                                if (needsRescheduling)
+                                {
                                     appt.EstimatedTime = currentTimeUtcAdjusted;
-                                if (appt.Status != AppointmentStatus.Rescheduled)
-                                    appt.Status = AppointmentStatus.Rescheduled;
-                                    await _notificationService.SendStatusChangedAsync(appt);
-                                _unitOfWork.Reposit<Appointment>().Update(appt);
+                                    if (appt.Status != AppointmentStatus.Rescheduled)
+                                    {
+                                        appt.Status = AppointmentStatus.Rescheduled;
+                                        await _notificationService.SendStatusChangedAsync(appt);
+                                    }
+                                    _unitOfWork.Reposit<Appointment>().Update(appt);
+                                }
                                 currentTimeUtcAdjusted = currentTimeUtcAdjusted.AddMinutes(minutesPerCase);
+                                appointmentIndex++;
                             }
                         }
+
                         var appointmentsToCancel = todaysAppointments
-                       .Where(a => !validAppointments.Contains(a) 
-                       || isCurrentDay && a.EstimatedTime >= clinicCloseUtc
-                       || a.EstimatedTime > currentTimeUtc)
-                       .Where(a => a.Status != AppointmentStatus.Cancelled);
-                        foreach (var appt in appointmentsToCancel)
-                        {
-                            appt.Status = AppointmentStatus.Cancelled;
-                            await _notificationService.SendStatusChangedAsync(appt);
-                            _unitOfWork.Reposit<Appointment>().Delete(appt);
-                        }
-                    }
-                    else if (isCurrentDay && currentTimeUtc > clinicCloseUtc)
-                    {
-                        foreach (var appt in todaysAppointments)
+                            .Where(a => !validAppointments.Contains(a) || (isCurrentDay && (a.EstimatedTime >= clinicCloseUtc || a.EstimatedTime > currentTimeUtc)))
+                            .Where(a => a.Status != AppointmentStatus.Cancelled);
+                        foreach (var appt in appointmentsToCancel.ToList())
                         {
                             if (appt.Status != AppointmentStatus.Cancelled)
                             {
@@ -380,6 +377,19 @@ namespace Clinic.Service
                             }
                         }
                     }
+                    else if (isCurrentDay && currentTimeUtc > clinicCloseUtc)
+                    {
+                        foreach (var appt in todaysAppointments.ToList())
+                        {
+                            if (appt.Status != AppointmentStatus.Cancelled)
+                            {
+                                appt.Status = AppointmentStatus.Cancelled;
+                                await _notificationService.SendStatusChangedAsync(appt);
+                                _unitOfWork.Reposit<Appointment>().Delete(appt);
+                            }
+                        }
+                    }
+
 
                     await _unitOfWork.CompleteAsync();
                 }
