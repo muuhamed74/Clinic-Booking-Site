@@ -321,20 +321,21 @@ namespace Clinic.Service
 
                     var isCurrentDay = dateUtc.Date == DateTime.UtcNow.Date;
 
-                    var validAppointments = todaysAppointments
+
+                        var validAppointments = todaysAppointments
                         .Where(a => a.EstimatedTime.HasValue && a.EstimatedTime.Value < clinicCloseUtc)
                         .OrderBy(a => a.EstimatedTime.Value)
                         .ToList();
 
                     if (validAppointments.Any())
                     {
-                        var firstValidTimeUtc = validAppointments.First().EstimatedTime.Value;
-                        var currentTimeUtcAdjusted = firstValidTimeUtc;
+                        var currentTimeUtcAdjusted = clinicOpenUtc; 
                         int appointmentIndex = 0;
 
                         foreach (var appt in validAppointments.ToList())
                         {
-                            if (isCurrentDay && (currentTimeUtcAdjusted > clinicCloseUtc || currentTimeUtcAdjusted > currentTimeUtc))
+                            if (isCurrentDay && (currentTimeUtcAdjusted > clinicCloseUtc
+                                || currentTimeUtcAdjusted > currentTimeUtc))
                             {
                                 if (appt.Status != AppointmentStatus.Cancelled)
                                 {
@@ -345,11 +346,7 @@ namespace Clinic.Service
                             }
                             else
                             {
-                                var expectedTime = clinicOpenUtc.AddMinutes(appointmentIndex * minutesPerCase);
-                                bool needsRescheduling = appt.EstimatedTime.Value < clinicOpenUtc ||
-                                                       Math.Abs((appt.EstimatedTime.Value - expectedTime).TotalMinutes) > minutesPerCase / 2;
-
-                                if (needsRescheduling)
+                                if (appt.EstimatedTime.Value < clinicOpenUtc)
                                 {
                                     appt.EstimatedTime = currentTimeUtcAdjusted;
                                     if (appt.Status != AppointmentStatus.Rescheduled)
@@ -365,7 +362,9 @@ namespace Clinic.Service
                         }
 
                         var appointmentsToCancel = todaysAppointments
-                            .Where(a => !validAppointments.Contains(a) || (isCurrentDay && (a.EstimatedTime >= clinicCloseUtc || a.EstimatedTime > currentTimeUtc)))
+                            .Where(a => a.EstimatedTime.HasValue && (a.EstimatedTime < clinicOpenUtc
+                            || (isCurrentDay && a.EstimatedTime >= clinicCloseUtc) 
+                            || a.EstimatedTime > currentTimeUtc))
                             .Where(a => a.Status != AppointmentStatus.Cancelled);
                         foreach (var appt in appointmentsToCancel.ToList())
                         {
