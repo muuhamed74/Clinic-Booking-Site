@@ -211,8 +211,8 @@ namespace Clinic.Service
                     throw new ArgumentException("لا يمكن تغيير المعاد ليوم مختلف.");
 
 
-                var clinicOpenTime = new TimeSpan(11, 30, 0); // 11:30 AM
-                var clinicCloseTime = new TimeSpan(22, 0, 0);  // 10:00 PM
+                var clinicOpenTime = new TimeSpan(11, 30, 0); 
+                var clinicCloseTime = new TimeSpan(22, 0, 0);  
                 var newTimeOfDay = newEgyptTime.TimeOfDay;
 
                 if (newTimeOfDay < clinicOpenTime || newTimeOfDay > clinicCloseTime)
@@ -284,6 +284,10 @@ namespace Clinic.Service
                 if (newDate == oldDate)
                     throw new ArgumentException("لا يمكن تغيير المعاد لنفس اليوم.");
 
+                var clinicOpenTime = new TimeSpan(11, 30, 0); 
+                var clinicCloseTime = new TimeSpan(22, 0, 0); 
+                var minutesPerCase = _settings.Value.MinutesPerCase;
+
                 var allAppointments = await _unitOfWork.Reposit<Appointment>()
                     .GetAllWithSpecAsync(new AppointmentsWithPatientsSpecification());
 
@@ -300,18 +304,19 @@ namespace Clinic.Service
                 if (sameDayAppointments.Any())
                 {
                     var lastAppt = sameDayAppointments.Last();
-                    newUtcTime = lastAppt.EstimatedTime.Value.AddMinutes(_settings.Value.MinutesPerCase);
+                    newUtcTime = lastAppt.EstimatedTime.Value.AddMinutes(minutesPerCase);
                 }
                 else
                 {
-                    if (!_settings.Value.ClinicStartTime.HasValue)
-                        throw new InvalidOperationException("ClinicStartTime غير معرف في الإعدادات.");
-
-                    newUtcTime = newDate.Add(_settings.Value.ClinicStartTime.Value);
+                    var egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+                    newUtcTime = TimeZoneInfo.ConvertTimeToUtc(newDate.Add(clinicOpenTime), egyptZone);
                 }
 
-                if (_settings.Value.ClinicEndTime.HasValue && newUtcTime.TimeOfDay > _settings.Value.ClinicEndTime.Value)
-                    throw new ArgumentException("اليوم ده ممتلئ بالمواعيد، لا يمكن إضافة معاد جديد بعد وقت إغلاق العيادة.");
+                if (TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo")).TimeOfDay < clinicOpenTime ||
+                    TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo")).TimeOfDay > clinicCloseTime)
+                {
+                    throw new InvalidOperationException($"أوقات العيادة من {clinicOpenTime:hh\\:mm} صباحاً إلى {clinicCloseTime:hh\\:mm} مساءً.");
+                }
 
                 appointment.EstimatedTime = newUtcTime;
                 appointment.Status = AppointmentStatus.Rescheduled;
