@@ -81,7 +81,7 @@ namespace Clinic_booking_site.Controllers
         }
 
         // dont forget to add authorize attribute
-        [HttpPost("reschedule-other-day")]
+        [HttpPut("reschedule-other-day")]
         public async Task<ActionResult<AppointmentDto>> RescheduleAppointmentToAnotherDay([FromBody] RescheduleAppointmentRequestDto requestDto)
         {
             var result = await _adminService.RescheduleAppointmentToAnotherDayAsync(requestDto);
