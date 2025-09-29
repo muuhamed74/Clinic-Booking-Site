@@ -55,19 +55,8 @@ namespace Clinic_booking_site.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid data" });
 
-            try
-            {
-                var updatedAppointment = await _adminService.CancelAppointmentAsync(dto.AppointmentId);
-                return Ok(updatedAppointment);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Something went wrong", details = ex.Message });
-            }
+            var updatedAppointment = await _adminService.CancelAppointmentAsync(dto.AppointmentId);
+            return Ok(updatedAppointment);
         }
 
 
@@ -78,19 +67,8 @@ namespace Clinic_booking_site.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(new { message = "Invalid data" });
 
-            try
-            {
-                var updatedAppointment = await _adminService.CompleteAppointmentAsync(dto.AppointmentId);
-                return Ok(updatedAppointment);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Something went wrong", details = ex.Message });
-            }
+            var updatedAppointment = await _adminService.CompleteAppointmentAsync(dto.AppointmentId);
+            return Ok(updatedAppointment);
         }
 
         [Authorize(Roles = "Admin")]
@@ -101,6 +79,15 @@ namespace Clinic_booking_site.Controllers
             var result = await _adminService.RescheduleAppointmentAsync(requestDto);
             return Ok(result);
         }
+
+        // dont forget to add authorize attribute
+        [HttpPost("reschedule-other-day")]
+        public async Task<ActionResult<AppointmentDto>> RescheduleAppointmentToAnotherDay([FromBody] RescheduleAppointmentRequestDto requestDto)
+        {
+            var result = await _adminService.RescheduleAppointmentToAnotherDayAsync(requestDto);
+            return Ok(result);
+        }
+
 
         [Authorize(Roles = "Admin")]
         [HttpPost("set-clinic-hours")]
