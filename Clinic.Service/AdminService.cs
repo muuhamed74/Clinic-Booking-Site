@@ -278,6 +278,7 @@ namespace Clinic.Service
             await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
             try
             {
+                var egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
                 var newDate = requestDto.NewTime.Date;
                 var oldDate = appointment.EstimatedTime.Value.Date;
 
@@ -308,7 +309,6 @@ namespace Clinic.Service
                 }
                 else
                 {
-                    var egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
                     newUtcTime = TimeZoneInfo.ConvertTimeToUtc(newDate.Add(clinicOpenTime), egyptZone);
                 }
 
@@ -318,14 +318,36 @@ namespace Clinic.Service
                     throw new InvalidOperationException($"أوقات العيادة من {clinicOpenTime:hh\\:mm} صباحاً إلى {clinicCloseTime:hh\\:mm} مساءً.");
                 }
 
+                var followingAppointments = allAppointments
+                 .Where(a =>
+                 a.EstimatedTime.HasValue &&
+                 a.EstimatedTime.Value.Date == oldDate &&
+                 a.QueueNumber > appointment.QueueNumber &&
+                 (a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled))
+                 .OrderBy(a => a.QueueNumber)
+                 .ToList();
+
                 appointment.EstimatedTime = newUtcTime;
                 appointment.Status = AppointmentStatus.Rescheduled;
-
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
+
+
+                var currentTime = TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, egyptZone).AddMinutes(minutesPerCase);
+
+                foreach (var appt in followingAppointments)
+                {
+                    appt.EstimatedTime = TimeZoneInfo.ConvertTimeToUtc(currentTime, egyptZone);
+                    appt.Status = AppointmentStatus.Rescheduled;
+                    currentTime = currentTime.AddMinutes(minutesPerCase);
+                    _unitOfWork.Reposit<Appointment>().Update(appt);
+                }
+
                 await _unitOfWork.CompleteAsync();
                 await transaction.CommitAsync();
 
                 await _notificationService.SendStatusChangedAsync(appointment);
+                foreach (var appt in followingAppointments)
+                    await _notificationService.SendStatusChangedAsync(appt);
 
                 return _mapper.Map<AppointmentDto>(appointment);
             }
