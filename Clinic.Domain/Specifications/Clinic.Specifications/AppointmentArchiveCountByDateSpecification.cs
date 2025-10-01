@@ -10,7 +10,7 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
     public class AppointmentArchiveCountByDateSpecification : BaseSpecification<AppointmentArchive>
     {
         public AppointmentArchiveCountByDateSpecification(DateTime date)
-       : base(a => a.Date.HasValue && a.Date.Value.Date == DateTime.SpecifyKind(date.Date, DateTimeKind.Unspecified))
+       : base(a => a.Date.HasValue && a.Date.Value.Date == DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))
         {
         }
     }

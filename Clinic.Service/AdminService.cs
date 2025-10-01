@@ -42,7 +42,7 @@ namespace Clinic.Service
             var appointments = await _unitOfWork.Reposit<Appointment>().ListAsync(specAppointments);
             var appointmentDtos = _mapper.Map<List<AppointmentDto>>(appointments);
 
-            DateTime filterDate = date ?? DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Unspecified);
+            DateTime filterDate = date ?? DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
 
             var specArchive = new AppointmentArchiveCountByDateSpecification(filterDate);
             var archiveAppointments = await _unitOfWork.Reposit<AppointmentArchive>().ListAsync(specArchive);
