@@ -44,7 +44,7 @@ namespace Clinic_booking_site.Controllers
 
             var (count, appointments) = await _adminService.GetAllAppointmentsWithCountAsync();
 
-            if (appointments.Any())
+            if (!appointments.Any())
                 return NotFound(new ApiResponce(400, "مفيش حجوزات النهارده"));
 
             return Ok(new 
