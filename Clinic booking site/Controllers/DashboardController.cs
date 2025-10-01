@@ -39,7 +39,7 @@ namespace Clinic_booking_site.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("appointments")]
-        public async Task<IActionResult> GetAllAppointments([FromQuery] DateTime? date)
+        public async Task<IActionResult> GetAllAppointments()
         {
 
             var (count, appointments) = await _adminService.GetAllAppointmentsWithCountAsync();
@@ -51,6 +51,20 @@ namespace Clinic_booking_site.Controllers
             {
                 Count = count,
                 Appointments = appointments 
+            });
+        }
+
+        public async Task<IActionResult> GetArchivedAppointments([FromQuery] DateTime? date)
+        {
+            var (count, archivedAppointments) = await _adminService.GetArchivedAppointmentsByDateAsync(date);
+
+            if (!archivedAppointments.Any())
+                return NotFound("مفيش حجوزات في الأرشيف لليوم المطلوب");
+
+            return Ok(new
+            {
+                Count = count,
+                Appointments = archivedAppointments
             });
         }
 
