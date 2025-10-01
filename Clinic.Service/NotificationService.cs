@@ -108,7 +108,7 @@ namespace Clinic.Service
         private async Task SendInternalAsync(Appointment appointment, string message , NotificationType type)
         {
             var notification = await SaveNotificationAsync(appointment.Id, message , type);
-            await _whatsAppProvider.SendAsync(appointment.Patient.Phone, notification.Message);
+            await _whatsAppProvider.SendAsync(appointment.Phone, notification.Message);
 
             notification.IsSent = true;
             notification.SentAt = DateTime.UtcNow;
