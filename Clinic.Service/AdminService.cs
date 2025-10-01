@@ -329,7 +329,7 @@ namespace Clinic.Service
 
                 appointment.EstimatedTime = newUtcTime;
                 appointment.Status = AppointmentStatus.Rescheduled;
-                appointment.Date = newDate;
+                appointment.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
 
 
@@ -339,7 +339,7 @@ namespace Clinic.Service
                 {
                     appt.EstimatedTime = TimeZoneInfo.ConvertTimeToUtc(currentTime, egyptZone);
                     appt.Status = AppointmentStatus.Rescheduled;
-                    appt.Date = newDate;
+                    appt.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
                     currentTime = currentTime.AddMinutes(minutesPerCase);
                     _unitOfWork.Reposit<Appointment>().Update(appt);
                 }
