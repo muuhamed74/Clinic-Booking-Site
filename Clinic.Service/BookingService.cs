@@ -11,6 +11,7 @@ using Clinic.Domain.Entities.Enums;
 using Clinic.Domain.Repositories;
 using Clinic.Domain.Specifications.Clinic.Specifications;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using Service_Abstraction;
 using Twilio.Http;
@@ -251,14 +252,19 @@ namespace Clinic.Service
                 }
                 catch (DbUpdateException ex) when (attempt < maxRetries)
                 {
-                    await transaction.RollbackAsync();
-                    await Task.Delay(50); 
+                    if (transaction != null && transaction.GetDbTransaction().Connection != null)
+                    {
+                        await transaction.RollbackAsync();
+                    }
+                    await Task.Delay(50);
                     continue;
                 }
                 catch
                 {
-
-                    await transaction.RollbackAsync();
+                    if (transaction != null && transaction.GetDbTransaction().Connection != null)
+                    {
+                        await transaction.RollbackAsync();
+                    }
                     throw;
                 }
             }
