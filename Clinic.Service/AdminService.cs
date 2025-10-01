@@ -315,7 +315,7 @@ namespace Clinic.Service
                 if (TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo")).TimeOfDay < clinicOpenTime ||
                     TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo")).TimeOfDay > clinicCloseTime)
                 {
-                    throw new InvalidOperationException($"أوقات العيادة من {clinicOpenTime:hh\\:mm} صباحاً إلى {clinicCloseTime:hh\\:mm} مساءً.");
+                    throw new ArgumentException($"أوقات العيادة من {clinicOpenTime:hh\\:mm} صباحاً إلى {clinicCloseTime:hh\\:mm} مساءً.");
                 }
 
                 var followingAppointments = allAppointments
@@ -329,6 +329,7 @@ namespace Clinic.Service
 
                 appointment.EstimatedTime = newUtcTime;
                 appointment.Status = AppointmentStatus.Rescheduled;
+                appointment.Date = newDate;
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
 
 
@@ -338,7 +339,23 @@ namespace Clinic.Service
                 {
                     appt.EstimatedTime = TimeZoneInfo.ConvertTimeToUtc(currentTime, egyptZone);
                     appt.Status = AppointmentStatus.Rescheduled;
+                    appt.Date = newDate;
                     currentTime = currentTime.AddMinutes(minutesPerCase);
+                    _unitOfWork.Reposit<Appointment>().Update(appt);
+                }
+
+                var updatedSameDayAppointments = allAppointments
+                 .Where(a =>
+                 a.EstimatedTime.HasValue &&
+                 a.EstimatedTime.Value.Date == newDate &&
+                 (a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled))
+                 .OrderBy(a => a.EstimatedTime)
+                 .ToList();
+
+                int queue = 1;
+                foreach (var appt in updatedSameDayAppointments)
+                {
+                    appt.QueueNumber = queue++;
                     _unitOfWork.Reposit<Appointment>().Update(appt);
                 }
 

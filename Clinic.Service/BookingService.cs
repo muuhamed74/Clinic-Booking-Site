@@ -101,7 +101,7 @@ namespace Clinic.Service
                     }
                     #endregion
 
-
+                    // change from patient to new table
                     #region Check Patient Existence
                     var patientSpec = new PatientByPhoneSpecification(request.Phone);
                     var patient = await _unitOfWork.Reposit<Patient>().GetEntityWithSpec(patientSpec);
