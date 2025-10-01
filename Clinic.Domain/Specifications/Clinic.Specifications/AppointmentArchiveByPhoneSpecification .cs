@@ -7,9 +7,9 @@ using Clinic.Domain.Entities;
 
 namespace Clinic.Domain.Specifications.Clinic.Specifications
 {
-    public class PatientByPhoneSpecification : BaseSpecification<Patient>
+    public class AppointmentArchiveByPhoneSpecification : BaseSpecification<AppointmentArchive>
     {
-        public PatientByPhoneSpecification(string phone) 
+        public AppointmentArchiveByPhoneSpecification(string phone) 
             : base(p => p.Phone == phone)
         {
         }

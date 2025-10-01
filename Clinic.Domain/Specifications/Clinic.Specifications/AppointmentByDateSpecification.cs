@@ -17,7 +17,6 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
                a.Date.Value < DateTime.SpecifyKind(utcDate.Date.AddDays(1), DateTimeKind.Utc) &&
                a.Status != AppointmentStatus.Cancelled)
         {
-            AddInclude(a => a.Patient);
         }
     }
 }

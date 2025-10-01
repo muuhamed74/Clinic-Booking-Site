@@ -14,7 +14,8 @@ namespace Clinic.Repo.Data
         public ClinicContext(DbContextOptions<ClinicContext> options) : base(options)
         {
         }
-        public DbSet<Patient> Patients { get; set; }
+
+        public DbSet<AppointmentArchive> AppointmentArchives { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<BookingOverride> BookingOverride { get; set; }

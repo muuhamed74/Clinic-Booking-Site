@@ -17,7 +17,6 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
                     a.EstimatedTime.Value <= DateTime.SpecifyKind(toUtc, DateTimeKind.Utc) &&
                     a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled)
         {
-            AddInclude(a => a.Patient); 
         }
     }
 }

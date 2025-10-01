@@ -12,7 +12,6 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
         public AppointmentByIdWithPatientSpecification(int appointmentId)
         : base(a => a.Id == appointmentId)
         {
-            AddInclude(a => a.Patient);
         }
     }
 }

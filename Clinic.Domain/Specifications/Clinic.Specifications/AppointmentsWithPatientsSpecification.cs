@@ -12,7 +12,6 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
         public AppointmentsWithPatientsSpecification()
               : base(a => true) 
         {
-            AddInclude(a => a.Patient);
         }
     }
 }

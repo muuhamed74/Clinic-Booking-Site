@@ -9,7 +9,7 @@ namespace Service_Abstraction
 {
     public interface IAdminService
     {
-        Task<List<AppointmentDto>> GetAllAppointmentsAsync();
+        Task<(int Count, List<AppointmentDto> Appointments)> GetAllAppointmentsWithCountAsync(DateTime? date = null);
         Task<AppointmentDto> CancelAppointmentAsync(int appointmentId);
         Task<AppointmentDto> CompleteAppointmentAsync(int appointmentId);
         Task<AppointmentDto> RescheduleAppointmentAsync(RescheduleAppointmentRequestDto requestDto);

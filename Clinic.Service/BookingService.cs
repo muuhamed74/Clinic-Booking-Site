@@ -103,25 +103,18 @@ namespace Clinic.Service
 
                     // change from patient to new table
                     #region Check Patient Existence
-                    var patientSpec = new PatientByPhoneSpecification(request.Phone);
-                    var patient = await _unitOfWork.Reposit<Patient>().GetEntityWithSpec(patientSpec);
-                    if (patient != null)
+                    var archiveSpec = new AppointmentArchiveByPhoneSpecification(request.Phone);
+                    var archivedPatient = await _unitOfWork.Reposit<AppointmentArchive>().GetEntityWithSpec(archiveSpec);
+                   
+                    if (archivedPatient != null)
                     {
                         var existingAppointmentSpec = new AppointmentByDateAndPhoneSpecification(request.Phone, bookingDateUtc);
-                        var existingAppointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(existingAppointmentSpec);
+                        var existingAppointment = await _unitOfWork.Reposit<Appointment>()
+                            .GetEntityWithSpec(existingAppointmentSpec);
 
                         if (existingAppointment != null)
                             throw new ArgumentException("لا يمكنك الحجز أكثر من مرة في نفس اليوم.");
                     }
-                    else
-                    {
-                        patient = _mapper.Map<Patient>(request);
-                        patient.CreatedAt = DateTime.UtcNow;
-                        await _unitOfWork.Reposit<Patient>().AddAsync(patient);
-                        await _unitOfWork.CompleteAsync();
-                    }
-
-
                     #endregion
 
 
@@ -214,19 +207,35 @@ namespace Clinic.Service
 
 
                     #region Make The Appointment and sending Notification
-                    var appointment = _mapper.Map<Appointment>(request);    
-                    appointment.PatientId = patient.Id;
-                    appointment.PatientName = request.Name;   
-                    appointment.Phone = patient.Phone;
+                    var appointment = _mapper.Map<Appointment>(request);
+
+
+                    appointment.PatientName = request.Name;
+                    appointment.Phone = request.Phone;
                     appointment.QueueNumber = queueNumber;
                     appointment.Status = AppointmentStatus.Waiting;
-                    appointment.EstimatedTime = estimatedTimeUtc;  
+                    appointment.EstimatedTime = estimatedTimeUtc;
                     appointment.Date = bookingDateUtc.Date;
                     appointment.AppointmentType = request.AppointmentType;
 
-
-
                     await _unitOfWork.Reposit<Appointment>().AddAsync(appointment);
+
+
+                    var appointmentArchive = new AppointmentArchive
+                    {
+                        PatientName = request.Name,
+                        Phone = request.Phone,
+                        QueueNumber = queueNumber,
+                        Status = AppointmentStatus.Waiting,
+                        EstimatedTime = estimatedTimeUtc,
+                        Date = bookingDateUtc.Date,
+                        AppointmentType = request.AppointmentType,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    await _unitOfWork.Reposit<AppointmentArchive>().AddAsync(appointmentArchive);
+
+
+
                     await _unitOfWork.CompleteAsync();
                     await transaction.CommitAsync();
 
@@ -261,8 +270,6 @@ namespace Clinic.Service
         {
             TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
             DateTime dateUtc = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
-            //if (dateUtc.Date < dateEgypt.Date)
-            //    dateUtc = dateUtc.AddDays(1);
 
             var spec = new AppointmentByDateAndPhoneSpecification(phoneNumber , dateUtc);
             var appointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(spec);

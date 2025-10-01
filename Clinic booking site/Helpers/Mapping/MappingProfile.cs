@@ -21,11 +21,6 @@ namespace Clinic_booking_site.Helpers.Mapping
                 .ForMember(dest => dest.EstimatedTime, opt => opt.MapFrom(src => TimeZoneInfo.ConvertTimeFromUtc(src.EstimatedTime.Value, egyptZone)));
 
 
-            CreateMap<AppointmentRequestDto, Patient>()
-                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone));
-
-
             CreateMap<AppointmentRequestDto, Appointment>()
                  .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.BookingDate));
 

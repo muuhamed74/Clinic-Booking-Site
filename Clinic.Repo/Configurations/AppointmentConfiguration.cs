@@ -38,11 +38,6 @@ namespace Clinic.Repo.Configurations
                    .HasForeignKey(n => n.AppointmentId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(a => a.Patient)
-                  .WithMany(p => p.Appointments)
-                  .HasForeignKey(a => a.PatientId)
-                  .OnDelete(DeleteBehavior.Cascade);
-
 
             builder.Property(a => a.AppointmentType)
              .HasConversion<string>()

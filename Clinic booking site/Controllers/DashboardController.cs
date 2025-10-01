@@ -1,4 +1,5 @@
-﻿using Clinic.Domain.DTOs;
+﻿using System.Diagnostics.Metrics;
+using Clinic.Domain.DTOs;
 using Clinic.Service;
 using Clinic_booking_site.Helpers.Errors;
 using Microsoft.AspNetCore.Authorization;
@@ -38,12 +39,19 @@ namespace Clinic_booking_site.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("appointments")]
-        public async Task<IActionResult> GetAllAppointments()
+        public async Task<IActionResult> GetAllAppointments([FromQuery] DateTime? date)
         {
-            var appointments = await _adminService.GetAllAppointmentsAsync();
-            if (appointments == null) 
-                return NotFound(new ApiResponce(400 , "مفيش حجوزات النهارده"));
-            return Ok(appointments);
+
+            var (count, appointments) = await _adminService.GetAllAppointmentsWithCountAsync();
+
+            if (appointments.Any())
+                return NotFound(new ApiResponce(400, "مفيش حجوزات النهارده"));
+
+            return Ok(new 
+            {
+                Count = count,
+                Appointments = appointments 
+            });
         }
 
 

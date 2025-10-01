@@ -35,12 +35,20 @@ namespace Clinic.Service
         }
 
 
-        public async Task<List<AppointmentDto>> GetAllAppointmentsAsync()
+        public async Task<(int Count, List<AppointmentDto> Appointments)> GetAllAppointmentsWithCountAsync(DateTime? date = null)
         {
-            var spec = new AppointmentsWithPatientsSpecification();
-            var appointments = await _unitOfWork.Reposit<Appointment>().ListAsync(spec);
 
-            return _mapper.Map<List<AppointmentDto>>(appointments);
+            var specAppointments = new AppointmentsWithPatientsSpecification();
+            var appointments = await _unitOfWork.Reposit<Appointment>().ListAsync(specAppointments);
+            var appointmentDtos = _mapper.Map<List<AppointmentDto>>(appointments);
+
+            DateTime filterDate = date ?? DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Unspecified);
+
+            var specArchive = new AppointmentArchiveCountByDateSpecification(filterDate);
+            var archiveAppointments = await _unitOfWork.Reposit<AppointmentArchive>().ListAsync(specArchive);
+            int count = archiveAppointments.Count;
+
+            return (count, appointmentDtos);
         }
 
 
