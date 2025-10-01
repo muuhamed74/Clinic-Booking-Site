@@ -54,6 +54,8 @@ namespace Clinic_booking_site.Controllers
             });
         }
 
+
+        [HttpGet("appointments/archive")]
         public async Task<IActionResult> GetArchivedAppointments([FromQuery] DateTime? date)
         {
             var (count, archivedAppointments) = await _adminService.GetArchivedAppointmentsByDateAsync(date);
