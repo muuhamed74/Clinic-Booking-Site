@@ -224,6 +224,7 @@ namespace Clinic.Service
 
                     var appointmentArchive = new AppointmentArchive
                     {
+                        AppointmentId = appointment.Id,
                         PatientName = request.Name,
                         Phone = request.Phone,
                         QueueNumber = queueNumber,
