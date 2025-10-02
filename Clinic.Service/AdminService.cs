@@ -149,23 +149,22 @@ namespace Clinic.Service
 
                 foreach (var appt in affectedAppointments)
                 {
+                    var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                    .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
+
+
+                    archiveAppt.QueueNumber = appt.QueueNumber;
+                    archiveAppt.EstimatedTime = appt.EstimatedTime;
+                    archiveAppt.Status = appt.Status;
+                    archiveAppt.Date = appt.Date;
+                    _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+
+
                     appt.QueueNumber = newQueue++;
                     appt.EstimatedTime = currentTime;
                     appt.Status = AppointmentStatus.Rescheduled;
                     currentTime = currentTime.AddMinutes(_settings.Value.MinutesPerCase);
                     _unitOfWork.Reposit<Appointment>().Update(appt);
-
-
-                var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
-                    .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
-
-
-                     archiveAppt.QueueNumber = appt.QueueNumber;
-                     archiveAppt.EstimatedTime = appt.EstimatedTime;
-                     archiveAppt.Status = appt.Status;
-                     archiveAppt.Date = appt.Date;
-                     _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
-                  
 
                 }
 
@@ -391,16 +390,16 @@ namespace Clinic.Service
                  .OrderBy(a => a.QueueNumber)
                  .ToList();
 
+                archiveAppointment.EstimatedTime = newUtcTime;
+                archiveAppointment.Status = AppointmentStatus.Rescheduled;
+                archiveAppointment.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
+                _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppointment);
+
                 appointment.EstimatedTime = newUtcTime;
                 appointment.Status = AppointmentStatus.Rescheduled;
                 appointment.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
 
-
-                archiveAppointment.EstimatedTime = newUtcTime;
-                archiveAppointment.Status = AppointmentStatus.Rescheduled;
-                archiveAppointment.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
-                _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppointment);
 
 
                 var currentTime = TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, egyptZone).AddMinutes(minutesPerCase);
@@ -411,17 +410,15 @@ namespace Clinic.Service
                     appt.Status = AppointmentStatus.Rescheduled;
                     appt.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
                     currentTime = currentTime.AddMinutes(minutesPerCase);
-                    _unitOfWork.Reposit<Appointment>().Update(appt);
 
-
-                var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
-                     .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
-
+                    var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                       .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
                     archiveAppt.EstimatedTime = appt.EstimatedTime;
                     archiveAppt.Status = appt.Status;
                     archiveAppt.Date = appt.Date;
-                    _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
 
+                    _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+                    _unitOfWork.Reposit<Appointment>().Update(appt);
                     currentTime = currentTime.AddMinutes(minutesPerCase);
 
                 }
@@ -437,15 +434,16 @@ namespace Clinic.Service
                 int queue = 1;
                 foreach (var appt in updatedSameDayAppointments)
                 {
-                    appt.QueueNumber = queue++;
-                    _unitOfWork.Reposit<Appointment>().Update(appt);
-
-
                 var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
                  .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
 
                     archiveAppt.QueueNumber = appt.QueueNumber;
                     _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+
+
+                    appt.QueueNumber = queue++;
+                    _unitOfWork.Reposit<Appointment>().Update(appt);
+
                     
                 }
 
