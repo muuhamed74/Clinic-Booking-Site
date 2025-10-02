@@ -70,7 +70,7 @@ namespace Clinic_booking_site.Controllers
             });
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("appointments/archive")]
         public async Task<IActionResult> DeleteArchivedAppointments([FromQuery] DateTime? date)
         {

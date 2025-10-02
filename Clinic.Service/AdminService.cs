@@ -133,8 +133,14 @@ namespace Clinic.Service
 
                 await _notificationService.SendStatusChangedAsync(appointment);
 
-                //_unitOfWork.Reposit<Appointment>().Update(appointment);
                 _unitOfWork.Reposit<Appointment>().Delete(appointment);
+
+                var archiveAppointment = await _unitOfWork.Reposit<AppointmentArchive>()
+                   .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+
+                 _unitOfWork.Reposit<AppointmentArchive>().Delete(archiveAppointment);
+
+
                 await _unitOfWork.CompleteAsync();
 
 
@@ -148,6 +154,19 @@ namespace Clinic.Service
                     appt.Status = AppointmentStatus.Rescheduled;
                     currentTime = currentTime.AddMinutes(_settings.Value.MinutesPerCase);
                     _unitOfWork.Reposit<Appointment>().Update(appt);
+
+
+                var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                    .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
+
+
+                     archiveAppt.QueueNumber = appt.QueueNumber;
+                     archiveAppt.EstimatedTime = appt.EstimatedTime;
+                     archiveAppt.Status = appt.Status;
+                     archiveAppt.Date = appt.Date;
+                     _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+                  
+
                 }
 
                 await _unitOfWork.CompleteAsync();
@@ -317,6 +336,9 @@ namespace Clinic.Service
             if (appointment == null)
                 throw new ArgumentException("Appointment not found");
 
+            var archiveAppointment = await _unitOfWork.Reposit<AppointmentArchive>()
+                .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+
             await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
             try
             {
@@ -375,6 +397,12 @@ namespace Clinic.Service
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
 
 
+                archiveAppointment.EstimatedTime = newUtcTime;
+                archiveAppointment.Status = AppointmentStatus.Rescheduled;
+                archiveAppointment.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
+                _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppointment);
+
+
                 var currentTime = TimeZoneInfo.ConvertTimeFromUtc(newUtcTime, egyptZone).AddMinutes(minutesPerCase);
 
                 foreach (var appt in followingAppointments)
@@ -384,6 +412,18 @@ namespace Clinic.Service
                     appt.Date = DateTime.SpecifyKind(newDate, DateTimeKind.Utc);
                     currentTime = currentTime.AddMinutes(minutesPerCase);
                     _unitOfWork.Reposit<Appointment>().Update(appt);
+
+
+                var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                     .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+
+                    archiveAppt.EstimatedTime = appt.EstimatedTime;
+                    archiveAppt.Status = appt.Status;
+                    archiveAppt.Date = appt.Date;
+                    _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+
+                    currentTime = currentTime.AddMinutes(minutesPerCase);
+
                 }
 
                 var updatedSameDayAppointments = allAppointments
@@ -399,6 +439,14 @@ namespace Clinic.Service
                 {
                     appt.QueueNumber = queue++;
                     _unitOfWork.Reposit<Appointment>().Update(appt);
+
+
+                var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                 .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+
+                    archiveAppt.QueueNumber = appt.QueueNumber;
+                    _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+                    
                 }
 
                 await _unitOfWork.CompleteAsync();
