@@ -412,7 +412,7 @@ namespace Clinic.Service
                     currentTime = currentTime.AddMinutes(minutesPerCase);
 
                     var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
-                       .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+                       .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
                     archiveAppt.EstimatedTime = appt.EstimatedTime;
                     archiveAppt.Status = appt.Status;
                     archiveAppt.Date = appt.Date;
@@ -435,7 +435,7 @@ namespace Clinic.Service
                 foreach (var appt in updatedSameDayAppointments)
                 {
                 var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
-                 .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+                 .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
 
                     archiveAppt.QueueNumber = appt.QueueNumber;
                     _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
@@ -444,7 +444,6 @@ namespace Clinic.Service
                     appt.QueueNumber = queue++;
                     _unitOfWork.Reposit<Appointment>().Update(appt);
 
-                    
                 }
 
                 await _unitOfWork.CompleteAsync();
