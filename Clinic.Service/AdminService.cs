@@ -51,6 +51,8 @@ namespace Clinic.Service
             return (count, appointmentDtos);
         }
 
+
+
         public async Task<(int Count, List<AppointmentDto> Appointments)> GetArchivedAppointmentsByDateAsync(DateTime? date = null)
         {
             DateTime filterDate = date ?? DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
@@ -64,6 +66,26 @@ namespace Clinic.Service
         }
 
 
+
+        public async Task<int> DeleteArchivedAppointmentsByDateAsync(DateTime? date = null)
+        {
+            DateTime filterDate = date ?? DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Utc);
+
+            var specArchive = new AppointmentArchiveCountByDateSpecification(filterDate);
+            var archiveAppointments = await _unitOfWork.Reposit<AppointmentArchive>().ListAsync(specArchive);
+
+            if (!archiveAppointments.Any())
+                return 0;
+
+            foreach (var appointment in archiveAppointments)
+            {
+                _unitOfWork.Reposit<AppointmentArchive>().Delete(appointment);
+            }
+
+            await _unitOfWork.CompleteAsync();
+
+            return archiveAppointments.Count;
+        }
 
 
 

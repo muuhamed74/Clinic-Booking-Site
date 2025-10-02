@@ -11,6 +11,7 @@ namespace Service_Abstraction
     {
         Task<(int Count, List<AppointmentDto> Appointments)> GetAllAppointmentsWithCountAsync();
         Task<(int Count, List<AppointmentDto> Appointments)> GetArchivedAppointmentsByDateAsync(DateTime? date = null);
+        Task<int> DeleteArchivedAppointmentsByDateAsync(DateTime? date = null);
         Task<AppointmentDto> CancelAppointmentAsync(int appointmentId);
         Task<AppointmentDto> CompleteAppointmentAsync(int appointmentId);
         Task<AppointmentDto> RescheduleAppointmentAsync(RescheduleAppointmentRequestDto requestDto);

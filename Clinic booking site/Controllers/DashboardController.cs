@@ -54,7 +54,7 @@ namespace Clinic_booking_site.Controllers
             });
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("appointments/archive")]
         public async Task<IActionResult> GetArchivedAppointments([FromQuery] DateTime? date)
         {
@@ -70,6 +70,20 @@ namespace Clinic_booking_site.Controllers
             });
         }
 
+
+        [HttpDelete("appointments/archive")]
+        public async Task<IActionResult> DeleteArchivedAppointments([FromQuery] DateTime? date)
+        {
+            var deletedCount = await _adminService.DeleteArchivedAppointmentsByDateAsync(date);
+
+            if (deletedCount == 0)
+                return NotFound("مفيش حجوزات في الأرشيف لليوم المطلوب");
+
+            return Ok(new
+            {
+                Message = $"تم مسح {deletedCount} حجز من الأرشيف لليوم {date?.ToString("yyyy-MM-dd") ?? DateTime.UtcNow.ToString("yyyy-MM-dd")}"
+            });
+        }
 
 
         [Authorize(Roles = "Admin")]
