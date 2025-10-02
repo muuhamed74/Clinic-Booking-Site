@@ -220,7 +220,7 @@ namespace Clinic.Service
                     appointment.AppointmentType = request.AppointmentType;
 
                     await _unitOfWork.Reposit<Appointment>().AddAsync(appointment);
-
+                    await _unitOfWork.CompleteAsync();
 
                     var appointmentArchive = new AppointmentArchive
                     {

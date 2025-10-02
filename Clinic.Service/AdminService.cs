@@ -133,12 +133,12 @@ namespace Clinic.Service
 
                 await _notificationService.SendStatusChangedAsync(appointment);
 
-                _unitOfWork.Reposit<Appointment>().Delete(appointment);
-
                 var archiveAppointment = await _unitOfWork.Reposit<AppointmentArchive>()
                    .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
 
-                 _unitOfWork.Reposit<AppointmentArchive>().Delete(archiveAppointment);
+                _unitOfWork.Reposit<AppointmentArchive>().Delete(archiveAppointment);
+
+                _unitOfWork.Reposit<Appointment>().Delete(appointment);
 
 
                 await _unitOfWork.CompleteAsync();
