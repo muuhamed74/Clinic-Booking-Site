@@ -26,19 +26,14 @@ namespace Clinic_booking_site.Helpers.Hangfire
         {
             try
             {
-                TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-                DateTime nowEgypt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, egyptZone); 
-                DateTime reminderToEgypt = nowEgypt.AddMinutes(30);
-                DateTime fromEgypt = nowEgypt.AddMinutes(0); 
-                DateTime toEgypt = nowEgypt.AddMinutes(35);
+                DateTime nowUtc = DateTime.UtcNow;
+                DateTime fromUtc = nowUtc;
+                DateTime toUtc = nowUtc.AddMinutes(35);
 
-                DateTime fromUtc = TimeZoneInfo.ConvertTimeToUtc(fromEgypt, egyptZone);
-                DateTime toUtc = TimeZoneInfo.ConvertTimeToUtc(toEgypt, egyptZone);
 
                 var spec = new AppointmentsForReminderSpecification(fromUtc, toUtc);
                 var appointments = await _unitOfWork.Reposit<Appointment>().ListAsync(spec);
 
-                _logger.LogInformation($"Found {appointments.Count} appointments for reminder between {nowEgypt:HH:mm} and {reminderToEgypt:HH:mm} (Egypt time)");
                 _logger.LogInformation($"Querying appointments between {fromUtc:HH:mm:ss} and {toUtc:HH:mm:ss} (UTC)");
 
                 foreach (var appointment in appointments)
