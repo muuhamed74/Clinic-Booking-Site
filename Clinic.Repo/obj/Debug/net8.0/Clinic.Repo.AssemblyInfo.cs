@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Clinic.Repo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+00b22fe1b15325f81706a58b95ec578ffc41c39e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+359f45610f0da04f9f5c34e140033d2e39020dc1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Clinic.Repo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Clinic.Repo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

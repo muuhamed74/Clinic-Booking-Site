@@ -3,6 +3,7 @@ using System;
 using Clinic.Repo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Clinic.Repo.Migrations
 {
     [DbContext(typeof(ClinicContext))]
-    partial class ClinicContextModelSnapshot : ModelSnapshot
+    [Migration("20251003143801_Addconfigurationtoarchivetable")]
+    partial class Addconfigurationtoarchivetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,7 +79,7 @@ namespace Clinic.Repo.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AppointmentId")
+                    b.Property<int>("AppointmentId")
                         .HasColumnType("integer");
 
                     b.Property<int>("AppointmentType")
@@ -425,7 +428,8 @@ namespace Clinic.Repo.Migrations
                     b.HasOne("Clinic.Domain.Entities.Appointment", "Appointment")
                         .WithOne("Archive")
                         .HasForeignKey("Clinic.Domain.Entities.AppointmentArchive", "AppointmentId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Clinic.Domain.Entities.Patient", "Patient")
                         .WithMany()

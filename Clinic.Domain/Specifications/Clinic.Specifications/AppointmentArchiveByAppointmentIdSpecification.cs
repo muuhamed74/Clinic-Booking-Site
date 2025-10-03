@@ -10,7 +10,7 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
     public class AppointmentArchiveByAppointmentIdSpecification : BaseSpecification<AppointmentArchive>
     {
         public AppointmentArchiveByAppointmentIdSpecification(int appointmentId)
-       : base(x => x.AppointmentId == appointmentId)
+               : base(x => x.AppointmentId.HasValue && x.AppointmentId.Value == appointmentId)
         {
         }
     }

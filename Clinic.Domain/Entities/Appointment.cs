@@ -21,6 +21,8 @@ namespace Clinic.Domain.Entities
 
         public string? PatientName { get; set; }
         public string? Phone { get; set; }
+
+        public AppointmentArchive Archive { get; set; } = null!;
     }
 
 }
