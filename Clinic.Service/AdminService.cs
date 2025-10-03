@@ -46,7 +46,7 @@ namespace Clinic.Service
 
             var specArchive = new AppointmentArchiveCountByDateSpecification(todayUtc);
             var archiveAppointments = await _unitOfWork.Reposit<AppointmentArchive>().ListAsync(specArchive);
-            int count = appointments.Count + archiveAppointments.Count;
+            int count = archiveAppointments.Count;
 
             return (count, appointmentDtos);
         }
