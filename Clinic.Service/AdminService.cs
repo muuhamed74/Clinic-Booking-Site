@@ -283,7 +283,9 @@ namespace Clinic.Service
                 appointment.Status = AppointmentStatus.Rescheduled;
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
                 await _unitOfWork.CompleteAsync();
-
+                await _notificationService.SendStatusChangedAsync(appointment);
+               
+                
                 var allAppointmentsToday = await _unitOfWork.Reposit<Appointment>()
                     .GetAllWithSpecAsync(new AppointmentsWithPatientsSpecification());
 
