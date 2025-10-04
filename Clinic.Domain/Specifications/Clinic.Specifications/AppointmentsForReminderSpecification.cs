@@ -15,7 +15,7 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
         : base(a => a.EstimatedTime.HasValue &&
                     a.EstimatedTime.Value >= DateTime.SpecifyKind(fromUtc, DateTimeKind.Utc) &&
                     a.EstimatedTime.Value <= DateTime.SpecifyKind(toUtc, DateTimeKind.Utc) &&
-                    a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled)
+                    (a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled))
         {
         }
     }
