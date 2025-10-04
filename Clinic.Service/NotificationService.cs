@@ -42,11 +42,12 @@ namespace Clinic.Service
                     if (_notificationSettings.SendBookingConfirmation)
                         await SendInternalAsync(
                             appointment,
-                            $"تم الحجز بنجاح 🎉\n" +
-                            $"الاسم: {appointment.PatientName}\n" +
-                            $"الدور: {appointment.QueueNumber}\n" +
-                            $"الوقت المتوقع: {estimatedTimeEgypt:HH:mm tt}\n",
-                            NotificationType.BookingConfirmation
+                            $"أهلاً {appointment.PatientName} 👋\n" +
+                            $"تم حجز موعدك يوم {dateEgypt:yyyy/MM/dd} الساعة {estimatedTimeEgypt:HH:mm tt} في عيادة دكتورة أميرة محسن.\n" +
+                            $"🎟 رقم دورك: {appointment.QueueNumber}\n" +
+                            $"برجاء التواجد في العيادة قبل الدور بحالتين ولمتابعة دوركم أولاً بأول يمكنكم الدخول علي الرابط التالي:\n" +
+                            $"https://amiramohsenclinic.com/info",
+                    NotificationType.BookingConfirmation
                             );
                     break;
 
@@ -58,10 +59,10 @@ namespace Clinic.Service
                     if (_notificationSettings.SendCancellation)
                         await SendInternalAsync(
                             appointment,
-                            $"تنويه ❌\n" +
-                            $"عذراً، تم إلغاء حجزك بتاريخ {dateEgypt:d}.\n" +
-                            $"الاسم: {appointment.PatientName}\n" +
-                            $"رقم الدور: {appointment.QueueNumber}.",
+                            $"⚠ تنويه: تم إلغاء حجزكم في عيادة د. أميرة محسن.\n" +
+                            $"👤 الاسم: {appointment.PatientName}\n" +
+                            $"قد يكون سبب الإلغاء: التأخر عن الموعد، أو ظرف طارئ لدى الدكتورة.\n" +
+                            $"يمكنكم إعادة الحجز أو المتابعة عبر الرابط: https://amiramohsenclinic.com/booking",
                             NotificationType.Cancellation
                             );
                     break;
@@ -69,11 +70,11 @@ namespace Clinic.Service
                 case AppointmentStatus.Rescheduled: 
                     await SendInternalAsync(
                         appointment,
-                        $"تنويه ⚠️\n" +
-                        $"تم تغيير موعدك.\n" +
-                        $"الاسم: {appointment.PatientName}\n" +
+                        $"⏰ تنويه: تم تأجيل موعد حجزكم في عيادة د. أميرة محسن.\n" +
+                        $"👤 الاسم: {appointment.PatientName}\n" +
+                        $"📅 الموعد الجديد: يوم {dateEgypt:yyyy/MM/dd} ⏰ الساعة {estimatedTimeEgypt:HH:mm tt}.\n" +
                         $"الدور الجديد: {appointment.QueueNumber}\n" +
-                        $"الوقت المتوقع الجديد: {estimatedTimeEgypt:HH:mm tt}.",
+                        $"يمكنكم المتابعة عبر الرابط: https://amiramohsenclinic.com/info",
                         NotificationType.Rescheduling
                     );
                     break;
@@ -96,10 +97,10 @@ namespace Clinic.Service
 
             await SendInternalAsync(
                 appointment,
-                $"تذكير ⏰\n" +
-                $"الاسم: {appointment.PatientName}\n" +
-                $"موعدك سيبدأ قريبا , تقريباً في تمام {estimatedTimeEgypt:HH:mm tt}.",
-                NotificationType.Reminder
+                $"⏰ تنبيه: برجاء سرعة التواجد بعيادة د. أميرة محسن لتفادي إلغاء حجزك.\n" +
+                $"👤 {appointment.PatientName}" +
+                $"⏰ موعدك المتوقع: {estimatedTimeEgypt: HH: mm tt}",
+            NotificationType.Reminder
                 );
         }
 
