@@ -10,7 +10,7 @@ using Service_Abstraction;
 
 namespace Clinic.Service.Notifications_Providers
 {
-    public class MetaWhatsAppProvider : IWhatsAppProvider
+    public class MetaWhatsAppProvider 
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly WhatsAppSettings _settings;
