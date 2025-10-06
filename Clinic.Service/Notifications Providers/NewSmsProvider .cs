@@ -28,7 +28,7 @@ namespace Clinic.Service.Notifications_Providers
         public async Task SendAsync(string toPhoneNumber, string message , int templateId)
         {
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
+            client.DefaultRequestHeaders.Add("gsor-token", _token);
 
             var payload = new
             {
