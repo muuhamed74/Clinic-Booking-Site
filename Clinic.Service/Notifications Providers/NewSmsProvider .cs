@@ -37,7 +37,7 @@ namespace Clinic.Service.Notifications_Providers
                 template_id = templateId
             };
 
-            var response = await client.PostAsJsonAsync($"{_apiUrl}/send", payload);
+            var response = await client.PostAsJsonAsync(_apiUrl, payload);
 
             if (!response.IsSuccessStatusCode)
             {
