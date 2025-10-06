@@ -16,16 +16,16 @@ namespace Clinic.Service
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWhatsAppProvider _whatsAppProvider;
+        private readonly IMessageProvider _messageProvider;
         private readonly NotificationSettings _notificationSettings;
 
         public NotificationService(
             IUnitOfWork unitOfWork,
             IOptions<NotificationSettings> notificationConfig,
-             IWhatsAppProvider whatsAppProvider)
+             IMessageProvider whatsAppProvider)
         {
             _unitOfWork = unitOfWork;
-            _whatsAppProvider = whatsAppProvider;
+            _messageProvider = whatsAppProvider;
             _notificationSettings = notificationConfig.Value;
         }
 
@@ -42,9 +42,10 @@ namespace Clinic.Service
                     if (_notificationSettings.SendBookingConfirmation)
                         await SendInternalAsync(
                             appointment,
-                            $"أهلاً {appointment.PatientName} 👋\n" +
+                            templateId: 101,
+                            $"أهلاً {appointment.PatientName}\n" +
                             $"تم حجز موعدك يوم {dateEgypt:yyyy/MM/dd} الساعة {estimatedTimeEgypt:HH:mm tt} في عيادة دكتورة أميرة محسن.\n" +
-                            $"🎟 رقم دورك: {appointment.QueueNumber}\n" +
+                            $"رقم دورك: {appointment.QueueNumber}\n" +
                             $"برجاء التواجد في العيادة قبل الدور بحالتين ولمتابعة دوركم أولاً بأول يمكنكم الدخول علي الرابط التالي:\n" +
                             $"https://amiramohsenclinic.com/info",
                     NotificationType.BookingConfirmation
@@ -59,8 +60,9 @@ namespace Clinic.Service
                     if (_notificationSettings.SendCancellation)
                         await SendInternalAsync(
                             appointment,
-                            $"⚠ تنويه: تم إلغاء حجزكم في عيادة د. أميرة محسن.\n" +
-                            $"👤 الاسم: {appointment.PatientName}\n" +
+                            templateId: 102,
+                            $"تنويه: تم إلغاء حجزكم في عيادة د. أميرة محسن.\n" +
+                            $"الاسم: {appointment.PatientName}\n" +
                             $"قد يكون سبب الإلغاء: التأخر عن الموعد، أو ظرف طارئ لدى الدكتورة.\n" +
                             $"يمكنكم إعادة الحجز أو المتابعة عبر الرابط: https://amiramohsenclinic.com/booking",
                             NotificationType.Cancellation
@@ -70,9 +72,10 @@ namespace Clinic.Service
                 case AppointmentStatus.Rescheduled: 
                     await SendInternalAsync(
                         appointment,
-                        $"⏰ تنويه: تم تأجيل موعد حجزكم في عيادة د. أميرة محسن.\n" +
-                        $"👤 الاسم: {appointment.PatientName}\n" +
-                        $"📅 الموعد الجديد: يوم {dateEgypt:yyyy/MM/dd} ⏰ الساعة {estimatedTimeEgypt:HH:mm tt}.\n" +
+                        templateId: 103,
+                        $"تنويه: تم تأجيل موعد حجزكم في عيادة د. أميرة محسن.\n" +
+                        $"الاسم: {appointment.PatientName}\n" +
+                        $"الموعد الجديد: يوم {dateEgypt:yyyy/MM/dd} الساعة {estimatedTimeEgypt:HH:mm tt}.\n" +
                         $"الدور الجديد: {appointment.QueueNumber}\n" +
                         $"يمكنكم المتابعة عبر الرابط: https://amiramohsenclinic.com/info",
                         NotificationType.Rescheduling
@@ -97,19 +100,21 @@ namespace Clinic.Service
 
             await SendInternalAsync(
                 appointment,
-                $"⏰ تنبيه: برجاء سرعة التواجد بعيادة د. أميرة محسن لتفادي إلغاء حجزك.\n" +
-                $"👤 {appointment.PatientName}" +
-                $"⏰ موعدك المتوقع: {estimatedTimeEgypt: HH: mm tt}",
+                templateId: 104,
+                $"تنبيه: برجاء سرعة التواجد بعيادة د. أميرة محسن لتفادي إلغاء حجزك.\n" +
+                $"{appointment.PatientName}" +
+                $"موعدك المتوقع: {estimatedTimeEgypt: HH: mm tt}",
             NotificationType.Reminder
                 );
         }
 
 
 
-        private async Task SendInternalAsync(Appointment appointment, string message , NotificationType type)
+        private async Task SendInternalAsync(Appointment appointment, int templateId, string message , NotificationType type)
         {
             var notification = await SaveNotificationAsync(appointment.Id, message , type);
-            await _whatsAppProvider.SendAsync(appointment.Phone, notification.Message);
+            await _messageProvider.SendAsync(appointment.Phone, message, templateId);
+
 
             notification.IsSent = true;
             notification.SentAt = DateTime.UtcNow;
@@ -121,7 +126,7 @@ namespace Clinic.Service
             var notification = new Notification
             {
                 AppointmentId = appointmentId,
-                Channel = "WhatsApp",
+                Channel = "SMS",
                 Message = message,
                 IsSent = false,
                 Type = type
@@ -133,5 +138,5 @@ namespace Clinic.Service
             return notification;
         }
 
-    }
+    }   
 }

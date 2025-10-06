@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "E:\\Coding\\Clinic booking site\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\notifications providers\\newsmsprovider .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\notifications providers\\newsmsprovider .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\bookingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\bookingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,14 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\helpers\\hangfire\\reminderjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\helpers\\hangfire\\reminderjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\bookingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\bookingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +38,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Program.cs",
               "RelativeDocumentMoniker": "Clinic booking site\\Program.cs",
@@ -43,7 +51,32 @@
               "ViewState": "AgIAAEgAAAAAAAAAAADgv1gAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T14:27:51.042Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "NewSmsProvider .cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\Notifications Providers\\NewSmsProvider .cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\Notifications Providers\\NewSmsProvider .cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\Notifications Providers\\NewSmsProvider .cs*",
+              "RelativeToolTip": "Clinic.Service\\Notifications Providers\\NewSmsProvider .cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-06T12:10:16.884Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NotificationService.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\NotificationService.cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\NotificationService.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\NotificationService.cs",
+              "RelativeToolTip": "Clinic.Service\\NotificationService.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAowIgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-06T11:44:47.241Z",
               "EditorCaption": ""
             },
             {
@@ -52,7 +85,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "ReminderJob.cs",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Helpers\\Hangfire\\ReminderJob.cs",
               "RelativeDocumentMoniker": "Clinic booking site\\Helpers\\Hangfire\\ReminderJob.cs",
@@ -64,7 +97,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "DashboardController.cs",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Controllers\\DashboardController.cs",
               "RelativeDocumentMoniker": "Clinic booking site\\Controllers\\DashboardController.cs",
@@ -72,24 +105,25 @@
               "RelativeToolTip": "Clinic booking site\\Controllers\\DashboardController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-24T18:54:15.867Z"
+              "WhenOpened": "2025-09-24T18:54:15.867Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AdminService.cs",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\AdminService.cs",
               "RelativeDocumentMoniker": "Clinic.Service\\AdminService.cs",
               "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\AdminService.cs",
               "RelativeToolTip": "Clinic.Service\\AdminService.cs",
-              "ViewState": "AgIAAAYBAAAAAAAAAAAuwB0BAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAPsAAABwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-21T21:29:48.907Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "BookingService.cs",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\BookingService.cs",
               "RelativeDocumentMoniker": "Clinic.Service\\BookingService.cs",
@@ -97,7 +131,8 @@
               "RelativeToolTip": "Clinic.Service\\BookingService.cs",
               "ViewState": "AgIAAPQAAAAAAAAAAAAowA8BAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T20:40:06.487Z"
+              "WhenOpened": "2025-09-19T20:40:06.487Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Service_Abstraction
 {
-    public interface IWhatsAppProvider
+    public interface IMessageProvider
     {
-        Task SendAsync(string toPhoneNumber, string message);
+        Task SendAsync(string toPhoneNumber, string message , int templateId);
     }
 }

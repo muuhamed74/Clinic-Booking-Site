@@ -44,7 +44,7 @@ namespace Clinic_booking_site.Extinsions
             services.AddScoped<ReminderJob>();
 
             // For Development:
-            services.AddScoped<IWhatsAppProvider, TwilioWhatsAppProvider>();
+            services.AddScoped<IMessageProvider, NewSmsProvider>();
 
             //// For Production:
             //services.AddScoped<IWhatsAppProvider, MetaWhatsAppProvider>();
@@ -60,8 +60,9 @@ namespace Clinic_booking_site.Extinsions
             services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
             services.Configure<NotificationSettings>(config.GetSection("NotificationSettings"));
             services.Configure<BookingSettings>(config.GetSection("BookingSettings"));
+            services.Configure<SmsSettings>(config.GetSection("SmsSettings"));
 
-            
+
 
 
 
