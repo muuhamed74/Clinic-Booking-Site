@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
@@ -40,16 +41,7 @@ namespace Clinic.Service
             {
                 case AppointmentStatus.Waiting:
                     if (_notificationSettings.SendBookingConfirmation)
-                        await SendInternalAsync(
-                            appointment,
-                            templateId: 101,
-                            $"أهلاً {appointment.PatientName}\n" +
-                            $"تم حجز موعدك يوم {dateEgypt:yyyy/MM/dd} الساعة {estimatedTimeEgypt:HH:mm tt} في عيادة دكتورة أميرة محسن.\n" +
-                            $"رقم دورك: {appointment.QueueNumber}\n" +
-                            $"برجاء التواجد في العيادة قبل الدور بحالتين ولمتابعة دوركم أولاً بأول يمكنكم الدخول علي الرابط التالي:\n" +
-                            $"https://amiramohsenclinic.com/info",
-                    NotificationType.BookingConfirmation
-                            );
+                        await SendInternalAsync( appointment, templateId: 710 ,NotificationType.BookingConfirmation);
                     break;
 
 
@@ -58,28 +50,11 @@ namespace Clinic.Service
 
                 case AppointmentStatus.Cancelled:
                     if (_notificationSettings.SendCancellation)
-                        await SendInternalAsync(
-                            appointment,
-                            templateId: 102,
-                            $"تنويه: تم إلغاء حجزكم في عيادة د. أميرة محسن.\n" +
-                            $"الاسم: {appointment.PatientName}\n" +
-                            $"قد يكون سبب الإلغاء: التأخر عن الموعد، أو ظرف طارئ لدى الدكتورة.\n" +
-                            $"يمكنكم إعادة الحجز أو المتابعة عبر الرابط: https://amiramohsenclinic.com/booking",
-                            NotificationType.Cancellation
-                            );
+                        await SendInternalAsync(appointment,templateId: 711, NotificationType.Cancellation);
                     break;
 
                 case AppointmentStatus.Rescheduled: 
-                    await SendInternalAsync(
-                        appointment,
-                        templateId: 103,
-                        $"تنويه: تم تأجيل موعد حجزكم في عيادة د. أميرة محسن.\n" +
-                        $"الاسم: {appointment.PatientName}\n" +
-                        $"الموعد الجديد: يوم {dateEgypt:yyyy/MM/dd} الساعة {estimatedTimeEgypt:HH:mm tt}.\n" +
-                        $"الدور الجديد: {appointment.QueueNumber}\n" +
-                        $"يمكنكم المتابعة عبر الرابط: https://amiramohsenclinic.com/info",
-                        NotificationType.Rescheduling
-                    );
+                    await SendInternalAsync(appointment,templateId: 712, NotificationType.Rescheduling);
                     break;
 
                 default:
@@ -98,23 +73,49 @@ namespace Clinic.Service
             if (!_notificationSettings.SendReminder)
                 return;
 
-            await SendInternalAsync(
-                appointment,
-                templateId: 104,
-                $"تنبيه: برجاء سرعة التواجد بعيادة د. أميرة محسن لتفادي إلغاء حجزك.\n" +
-                $"{appointment.PatientName}" +
-                $"موعدك المتوقع: {estimatedTimeEgypt: HH: mm tt}",
-            NotificationType.Reminder
-                );
+            await SendInternalAsync(appointment,templateId: 713, NotificationType.Reminder);
         }
 
 
 
-        private async Task SendInternalAsync(Appointment appointment, int templateId, string message , NotificationType type)
+        private async Task SendInternalAsync(Appointment appointment, int templateId, NotificationType type)
         {
-            var notification = await SaveNotificationAsync(appointment.Id, message , type);
-            await _messageProvider.SendAsync(appointment.Phone, message, templateId);
+            TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+            var estimatedTimeEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.EstimatedTime.Value, egyptZone);
+            var dateEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.Date.Value, egyptZone);
 
+
+            List<string> variables = templateId switch
+            {
+                710 => new()
+            {
+            appointment.PatientName,
+            dateEgypt.ToString("yyyy/MM/dd", new CultureInfo("ar-EG")),
+            estimatedTimeEgypt.ToString("hh:mm tt", new CultureInfo("ar-EG")),
+            appointment.QueueNumber.ToString()
+            },
+                711 => new()
+            {
+                appointment.PatientName
+            },
+                712 => new()
+            {
+            appointment.PatientName,
+            dateEgypt.ToString("yyyy/MM/dd", new CultureInfo("ar-EG")),
+            estimatedTimeEgypt.ToString("hh:mm tt", new CultureInfo("ar-EG")),
+            appointment.QueueNumber.ToString()
+            },
+                713 => new()
+            {
+            appointment.PatientName,
+            estimatedTimeEgypt.ToString("hh:mm tt", new CultureInfo("ar-EG"))
+            },
+                _ => new()
+            };
+
+            var notification = await SaveNotificationAsync(appointment.Id, $"Template {templateId}", type);
+
+            await _messageProvider.SendAsync(appointment.Phone, templateId, variables);
 
             notification.IsSent = true;
             notification.SentAt = DateTime.UtcNow;

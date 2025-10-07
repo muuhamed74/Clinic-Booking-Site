@@ -8,6 +8,6 @@ namespace Service_Abstraction
 {
     public interface IMessageProvider
     {
-        Task SendAsync(string toPhoneNumber, string message , int templateId);
+        Task SendAsync(string toPhoneNumber, int templateId, List<string>? variables = null);
     }
 }

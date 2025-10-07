@@ -25,17 +25,20 @@ namespace Clinic.Service.Notifications_Providers
             _token = settings.Value.ApiToken;
         }
 
-        public async Task SendAsync(string toPhoneNumber, string message , int templateId)
+        public async Task SendAsync(string toPhoneNumber, int templateId, List<string>? variables = null)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("gsor-token", _token);
 
-            var payload = new
+            var payload = new Dictionary<string, object?>
             {
-                name = "AmiramohsenClinic",
-                phoneNumber = toPhoneNumber,
-                template_id = templateId
+                ["name"] = "AmiramohsenClinic",
+                ["phoneNumber"] = toPhoneNumber,
+                ["template_id"] = templateId
             };
+
+            if (variables != null && variables.Count > 0)
+                payload["variables"] = variables;
 
             var response = await client.PostAsJsonAsync(_apiUrl, payload);
 
