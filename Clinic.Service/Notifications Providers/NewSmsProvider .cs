@@ -38,7 +38,7 @@ namespace Clinic.Service.Notifications_Providers
             };
 
             if (variables != null && variables.Count > 0)
-                payload["variables"] = variables;
+                payload["vars"] = variables;
 
             var response = await client.PostAsJsonAsync(_apiUrl, payload);
 
