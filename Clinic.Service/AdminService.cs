@@ -806,6 +806,7 @@ namespace Clinic.Service
                             if (!ap.Entity.EstimatedTime.HasValue || ap.Entity.EstimatedTime.Value != newUtc)
                             {
                                 ap.Entity.EstimatedTime = newUtc;
+                                ap.Entity.Date = dateUtc;
                                 ap.Entity.Status = AppointmentStatus.Rescheduled;
                                 _unitOfWork.Reposit<Appointment>().Update(ap.Entity);
                             }
@@ -890,6 +891,7 @@ namespace Clinic.Service
                         var slot = candidateSlots[i];
                         var newUtc = TimeZoneInfo.ConvertTimeToUtc(slot, egyptZone);
                         appt.EstimatedTime = newUtc;
+                        appt.Date = candidateDayUtc;
                         appt.Status = AppointmentStatus.Rescheduled;
                         _unitOfWork.Reposit<Appointment>().Update(appt);
                         placed.Add(appt);
