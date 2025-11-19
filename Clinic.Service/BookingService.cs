@@ -68,7 +68,8 @@ namespace Clinic.Service
                     var tomorrowEgypt = todayEgypt.AddDays(1);
 
                     bookingDateEgypt = DateTime.SpecifyKind(request.BookingDate.Date, DateTimeKind.Unspecified);
-                    bookingDateUtc = DateTime.SpecifyKind(request.BookingDate.Date, DateTimeKind.Utc);                    //if (bookingDateUtc.Date < bookingDateEgypt.Date)
+                    bookingDateUtc = DateTime.SpecifyKind(request.BookingDate.Date, DateTimeKind.Utc);                 
+                    //if (bookingDateUtc.Date < bookingDateEgypt.Date)
                     //    bookingDateUtc = bookingDateUtc.AddDays(1);
 
                     Console.WriteLine("---- Booking Debug ----");

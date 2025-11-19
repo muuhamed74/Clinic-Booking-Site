@@ -545,19 +545,165 @@ namespace Clinic.Service
             await _unitOfWork.CompleteAsync();
         }
 
+
+
+
+
+
         //Not Used Yet
+
+
         public async Task<BookingOverrideDto> UpsertBookingOverrideAsync(BookingOverrideDto request)
         {
+            #region old code
+            //    await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
+
+            //    try
+            //    {
+            //        TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+            //        DateTime dateUtc = DateTime.SpecifyKind(request.Date.Value, DateTimeKind.Utc);
+            //        DateTime dateEgypt = TimeZoneInfo.ConvertTimeFromUtc(dateUtc, egyptZone).Date;
+
+            //        var existingOverride = await _unitOfWork.Reposit<BookingOverride>()
+            //                .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
+
+            //        BookingOverride entity;
+
+            //        if (existingOverride != null)
+            //        {
+            //            existingOverride.ClinicStartTime = request.ClinicStartTime;
+            //            existingOverride.ClinicEndTime = request.ClinicEndTime;
+            //            existingOverride.Date = dateUtc;
+            //            _unitOfWork.Reposit<BookingOverride>().Update(existingOverride);
+            //            entity = existingOverride;
+            //        }
+            //        else
+            //        {
+            //            var newOverride = new BookingOverride
+            //            {
+            //                Date = dateUtc,
+            //                ClinicStartTime = request.ClinicStartTime,
+            //                ClinicEndTime = request.ClinicEndTime
+            //            };
+
+            //            await _unitOfWork.Reposit<BookingOverride>().AddAsync(newOverride);
+            //            entity = newOverride;
+            //        }
+
+            //        await _unitOfWork.CompleteAsync();
+
+
+            //        var todaysAppointments = await _unitOfWork.Reposit<Appointment>()
+            //            .ListAsync(new AppointmentByDateSpecification(dateUtc));
+
+            //        if (todaysAppointments.Any())
+            //        {
+            //            var clinicOpenEgypt = dateEgypt.Add(request.ClinicStartTime.Value);
+            //            var clinicOpenUtc = TimeZoneInfo.ConvertTimeToUtc(clinicOpenEgypt, egyptZone);
+            //            var clinicCloseEgypt = dateEgypt.Add(request.ClinicEndTime.Value);
+            //            var clinicCloseUtc = TimeZoneInfo.ConvertTimeToUtc(clinicCloseEgypt, egyptZone);
+            //            var minutesPerCase = _settings.Value.MinutesPerCase;
+            //            var currentTimeUtc = DateTime.UtcNow;
+
+            //            var isCurrentDay = dateUtc.Date == DateTime.UtcNow.Date;
+
+
+            //            var validAppointments = todaysAppointments
+            //            .Where(a => a.EstimatedTime.HasValue && a.EstimatedTime.Value < clinicCloseUtc)
+            //            .OrderBy(a => a.EstimatedTime.Value)
+            //            .ToList();
+
+            //            if (validAppointments.Any())
+            //            {
+            //                var currentTimeUtcAdjusted = clinicOpenUtc;
+            //                int appointmentIndex = 0;
+
+            //                foreach (var appt in validAppointments.ToList())
+            //                {
+            //                    if (isCurrentDay && (currentTimeUtcAdjusted > clinicCloseUtc
+            //                        || currentTimeUtcAdjusted > currentTimeUtc))
+            //                    {
+            //                        if (appt.Status != AppointmentStatus.Cancelled)
+            //                        {
+            //                            appt.Status = AppointmentStatus.Cancelled;
+            //                            await _notificationService.SendStatusChangedAsync(appt);
+            //                            _unitOfWork.Reposit<Appointment>().Delete(appt);
+            //                        }
+            //                    }
+            //                    else
+            //                    {
+            //                        if (appt.EstimatedTime.Value < clinicOpenUtc)
+            //                        {
+            //                            appt.EstimatedTime = currentTimeUtcAdjusted;
+            //                            if (appt.Status != AppointmentStatus.Rescheduled)
+            //                            {
+            //                                appt.Status = AppointmentStatus.Rescheduled;
+            //                                await _notificationService.SendStatusChangedAsync(appt);
+            //                            }
+            //                            _unitOfWork.Reposit<Appointment>().Update(appt);
+            //                        }
+            //                        currentTimeUtcAdjusted = currentTimeUtcAdjusted.AddMinutes(minutesPerCase);
+            //                        appointmentIndex++;
+            //                    }
+            //                }
+
+            //                var appointmentsToCancel = todaysAppointments
+            //                    .Where(a => a.EstimatedTime.HasValue && (a.EstimatedTime < clinicOpenUtc
+            //                    || (isCurrentDay && a.EstimatedTime >= clinicCloseUtc)
+            //                    || a.EstimatedTime > currentTimeUtc))
+            //                    .Where(a => a.Status != AppointmentStatus.Cancelled);
+            //                foreach (var appt in appointmentsToCancel.ToList())
+            //                {
+            //                    if (appt.Status != AppointmentStatus.Cancelled)
+            //                    {
+            //                        appt.Status = AppointmentStatus.Cancelled;
+            //                        await _notificationService.SendStatusChangedAsync(appt);
+            //                        _unitOfWork.Reposit<Appointment>().Delete(appt);
+            //                    }
+            //                }
+            //            }
+            //            else if (isCurrentDay && currentTimeUtc > clinicCloseUtc)
+            //            {
+            //                foreach (var appt in todaysAppointments.ToList())
+            //                {
+            //                    if (appt.Status != AppointmentStatus.Cancelled)
+            //                    {
+            //                        appt.Status = AppointmentStatus.Cancelled;
+            //                        await _notificationService.SendStatusChangedAsync(appt);
+            //                        _unitOfWork.Reposit<Appointment>().Delete(appt);
+            //                    }
+            //                }
+            //            }
+
+
+            //            await _unitOfWork.CompleteAsync();
+            //        }
+            //        await transaction.CommitAsync();
+            //        var dto = _mapper.Map<BookingOverrideDto>(entity);
+            //        dto.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
+            //        return dto;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        await transaction.RollbackAsync();
+            //        Console.WriteLine($"Transaction failed: {ex.Message}");
+            //        throw;
+            //    }
+            //}
+            #endregion
+
             await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
 
             try
             {
                 TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-                DateTime dateUtc = DateTime.SpecifyKind(request.Date.Value, DateTimeKind.Utc);
-                DateTime dateEgypt = TimeZoneInfo.ConvertTimeFromUtc(dateUtc, egyptZone).Date;
+                DateTime dateEgyptLocal = DateTime.SpecifyKind(request.Date.Value.Date, DateTimeKind.Unspecified);
+                DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
 
-                var existingOverride = await _unitOfWork.Reposit<BookingOverride>()
-                        .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
+
+                var bookingOverrideRepo = _unitOfWork.Reposit<BookingOverride>();
+                var existingOverride = await bookingOverrideRepo
+                    .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
 
                 BookingOverride entity;
 
@@ -566,7 +712,7 @@ namespace Clinic.Service
                     existingOverride.ClinicStartTime = request.ClinicStartTime;
                     existingOverride.ClinicEndTime = request.ClinicEndTime;
                     existingOverride.Date = dateUtc;
-                    _unitOfWork.Reposit<BookingOverride>().Update(existingOverride);
+                    bookingOverrideRepo.Update(existingOverride);
                     entity = existingOverride;
                 }
                 else
@@ -578,113 +724,199 @@ namespace Clinic.Service
                         ClinicEndTime = request.ClinicEndTime
                     };
 
-                    await _unitOfWork.Reposit<BookingOverride>().AddAsync(newOverride);
+                    await bookingOverrideRepo.AddAsync(newOverride);
                     entity = newOverride;
                 }
 
                 await _unitOfWork.CompleteAsync();
 
-
                 var todaysAppointments = await _unitOfWork.Reposit<Appointment>()
                     .ListAsync(new AppointmentByDateSpecification(dateUtc));
 
-                if (todaysAppointments.Any())
+                if (!todaysAppointments.Any())
                 {
-                    var clinicOpenEgypt = dateEgypt.Add(request.ClinicStartTime.Value);
-                    var clinicOpenUtc = TimeZoneInfo.ConvertTimeToUtc(clinicOpenEgypt, egyptZone);
-                    var clinicCloseEgypt = dateEgypt.Add(request.ClinicEndTime.Value);
-                    var clinicCloseUtc = TimeZoneInfo.ConvertTimeToUtc(clinicCloseEgypt, egyptZone);
-                    var minutesPerCase = _settings.Value.MinutesPerCase;
-                    var currentTimeUtc = DateTime.UtcNow;
+                    await transaction.CommitAsync();
+                    var dtoEmpty = _mapper.Map<BookingOverrideDto>(entity);
+                    dtoEmpty.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
+                    return dtoEmpty;
+                }
 
-                    var isCurrentDay = dateUtc.Date == DateTime.UtcNow.Date;
+                int minutesPerCase = _settings.Value.MinutesPerCase;
 
-
-                    var validAppointments = todaysAppointments
-                    .Where(a => a.EstimatedTime.HasValue && a.EstimatedTime.Value < clinicCloseUtc)
-                    .OrderBy(a => a.EstimatedTime.Value)
+                var apptsLocal = todaysAppointments
+                    .Where(a => a.EstimatedTime.HasValue)
+                    .Select(a => new
+                    {
+                        Entity = a,
+                        Local = TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone)
+                    })
+                    .OrderBy(x => x.Local)
                     .ToList();
 
-                    if (validAppointments.Any())
-                    {
-                        var currentTimeUtcAdjusted = clinicOpenUtc;
-                        int appointmentIndex = 0;
+                var clinicOpenLocal = dateEgyptLocal.Add((request.ClinicStartTime ?? _settings.Value.ClinicStartTime).Value);
+                var clinicCloseLocal = dateEgyptLocal.Add((request.ClinicEndTime ?? _settings.Value.ClinicEndTime).Value);
 
-                        foreach (var appt in validAppointments.ToList())
-                        {
-                            if (isCurrentDay && (currentTimeUtcAdjusted > clinicCloseUtc
-                                || currentTimeUtcAdjusted > currentTimeUtc))
-                            {
-                                if (appt.Status != AppointmentStatus.Cancelled)
-                                {
-                                    appt.Status = AppointmentStatus.Cancelled;
-                                    await _notificationService.SendStatusChangedAsync(appt);
-                                    _unitOfWork.Reposit<Appointment>().Delete(appt);
-                                }
-                            }
-                            else
-                            {
-                                if (appt.EstimatedTime.Value < clinicOpenUtc)
-                                {
-                                    appt.EstimatedTime = currentTimeUtcAdjusted;
-                                    if (appt.Status != AppointmentStatus.Rescheduled)
-                                    {
-                                        appt.Status = AppointmentStatus.Rescheduled;
-                                        await _notificationService.SendStatusChangedAsync(appt);
-                                    }
-                                    _unitOfWork.Reposit<Appointment>().Update(appt);
-                                }
-                                currentTimeUtcAdjusted = currentTimeUtcAdjusted.AddMinutes(minutesPerCase);
-                                appointmentIndex++;
-                            }
-                        }
-
-                        var appointmentsToCancel = todaysAppointments
-                            .Where(a => a.EstimatedTime.HasValue && (a.EstimatedTime < clinicOpenUtc
-                            || (isCurrentDay && a.EstimatedTime >= clinicCloseUtc)
-                            || a.EstimatedTime > currentTimeUtc))
-                            .Where(a => a.Status != AppointmentStatus.Cancelled);
-                        foreach (var appt in appointmentsToCancel.ToList())
-                        {
-                            if (appt.Status != AppointmentStatus.Cancelled)
-                            {
-                                appt.Status = AppointmentStatus.Cancelled;
-                                await _notificationService.SendStatusChangedAsync(appt);
-                                _unitOfWork.Reposit<Appointment>().Delete(appt);
-                            }
-                        }
-                    }
-                    else if (isCurrentDay && currentTimeUtc > clinicCloseUtc)
-                    {
-                        foreach (var appt in todaysAppointments.ToList())
-                        {
-                            if (appt.Status != AppointmentStatus.Cancelled)
-                            {
-                                appt.Status = AppointmentStatus.Cancelled;
-                                await _notificationService.SendStatusChangedAsync(appt);
-                                _unitOfWork.Reposit<Appointment>().Delete(appt);
-                            }
-                        }
-                    }
+                var nowEgyptLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, egyptZone);
+                var isCurrentDay = dateEgyptLocal == nowEgyptLocal.Date;
 
 
-                    await _unitOfWork.CompleteAsync();
+                var slotsToday = new List<DateTime>();
+                var slotPointer = clinicOpenLocal;
+                while (slotPointer < clinicCloseLocal)
+                {
+                    if (!isCurrentDay || slotPointer >= nowEgyptLocal)
+                        slotsToday.Add(slotPointer);
+
+                    slotPointer = slotPointer.AddMinutes(minutesPerCase);
                 }
+
+                var occupiedToday = new HashSet<DateTime>();
+
+                var toReschedule = new List<Appointment>();
+
+                foreach (var ap in apptsLocal)
+                {
+                    var apLocal = ap.Local;
+
+                    if (apLocal >= clinicOpenLocal && apLocal < clinicCloseLocal && (!isCurrentDay || apLocal >= nowEgyptLocal))
+                    {
+                        var slot = slotsToday.FirstOrDefault(s => s >= apLocal && !occupiedToday.Contains(s));
+                        if (slot == default)
+                        {
+                            slot = slotsToday.FirstOrDefault(s => !occupiedToday.Contains(s));
+                        }
+
+                        if (slot != default)
+                        {
+                            occupiedToday.Add(slot);
+
+                            var newUtc = TimeZoneInfo.ConvertTimeToUtc(slot, egyptZone);
+                            if (!ap.Entity.EstimatedTime.HasValue || ap.Entity.EstimatedTime.Value != newUtc)
+                            {
+                                ap.Entity.EstimatedTime = newUtc;
+                                ap.Entity.Status = AppointmentStatus.Rescheduled;
+                                _unitOfWork.Reposit<Appointment>().Update(ap.Entity);
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    toReschedule.Add(ap.Entity);
+                }
+
+                // Helper: working days set
+                var workingDays = new HashSet<DayOfWeek>
+                 {
+                  (DayOfWeek)ClinicWorkingDays.Saturday,
+                  (DayOfWeek)ClinicWorkingDays.Sunday,
+                  (DayOfWeek)ClinicWorkingDays.Tuesday,
+                  (DayOfWeek)ClinicWorkingDays.Wednesday
+                };
+
+                // Helper to get next working day after a given local date
+                DateTime GetNextWorkingDayLocal(DateTime fromLocal)
+                {
+                    var next = fromLocal.AddDays(1);
+                    while (!workingDays.Contains(next.DayOfWeek))
+                        next = next.AddDays(1);
+                    return next;
+                }
+
+                var notificationsToSend = new List<Appointment>();
+
+                async Task<List<Appointment>> PlaceOnDayAsync(List<Appointment> batch, DateTime candidateDayLocal)
+                {
+                    // Find weither the candidate day is closed via override or not
+                    var candidateDayUtc = TimeZoneInfo.ConvertTimeToUtc(candidateDayLocal.Date, egyptZone);
+                    var overrideForDay = await _unitOfWork.Reposit<BookingOverride>()
+                        .GetEntityWithSpec(new BookingOverrideByDateSpecification(candidateDayUtc));
+
+                    if (overrideForDay != null && overrideForDay.IsClosed)
+                    {
+                        return batch;
+                    }
+
+                    var dayClinicStart = (overrideForDay?.ClinicStartTime ?? _settings.Value.ClinicStartTime).Value;
+                    var dayClinicEnd = (overrideForDay?.ClinicEndTime ?? _settings.Value.ClinicEndTime).Value;
+
+                    var dayOpenLocal = candidateDayLocal.Date.Add(dayClinicStart);
+                    var dayCloseLocal = candidateDayLocal.Date.Add(dayClinicEnd);
+
+                    var existingOnCandidate = (await _unitOfWork.Reposit<Appointment>()
+                        .ListAsync(new AppointmentByDateSpecification(candidateDayUtc)))
+                        .Where(a => a.EstimatedTime.HasValue)
+                        .Select(a => TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone))
+                        .OrderBy(t => t)
+                        .ToList();
+
+                    var occupied = new HashSet<DateTime>(existingOnCandidate);
+
+                    var candidateSlots = new List<DateTime>();
+                    var cur = dayOpenLocal;
+                    while (cur < dayCloseLocal)
+                    {
+                        if (!occupied.Contains(cur))
+                            candidateSlots.Add(cur);
+                        cur = cur.AddMinutes(minutesPerCase);
+                    }
+
+                    var placed = new List<Appointment>();
+
+
+                    for (int i = 0; i < candidateSlots.Count && i < batch.Count; i++)
+                    {
+                        var appt = batch[i];
+                        var slot = candidateSlots[i];
+                        var newUtc = TimeZoneInfo.ConvertTimeToUtc(slot, egyptZone);
+                        appt.EstimatedTime = newUtc;
+                        appt.Status = AppointmentStatus.Rescheduled;
+                        _unitOfWork.Reposit<Appointment>().Update(appt);
+                        placed.Add(appt);
+                    }
+
+                    notificationsToSend.AddRange(placed);
+
+                    return batch.Skip(placed.Count).ToList();
+                }
+
+                var remaining = toReschedule;
+                var searchDay = dateEgyptLocal;
+                
+                // start trying from same day + 1 in loop
+                while (remaining.Any())
+                {
+                    searchDay = GetNextWorkingDayLocal(searchDay);
+
+                    remaining = await PlaceOnDayAsync(remaining, searchDay);
+
+                }
+
+                await _unitOfWork.CompleteAsync();
                 await transaction.CommitAsync();
+
+                foreach (var ap in notificationsToSend)
+                {
+                    try
+                    {
+                        await _notificationService.SendStatusChangedAsync(ap);
+                    }
+                    catch
+                    {
+                    }
+                }
+
                 var dto = _mapper.Map<BookingOverrideDto>(entity);
                 dto.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
                 return dto;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
-                Console.WriteLine($"Transaction failed: {ex.Message}");
                 throw;
             }
         }
-
-
-
-
     }
+
 }
+
