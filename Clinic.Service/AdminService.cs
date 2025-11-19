@@ -733,6 +733,18 @@ namespace Clinic.Service
                 var todaysAppointments = await _unitOfWork.Reposit<Appointment>()
                     .ListAsync(new AppointmentByDateSpecification(dateUtc));
 
+
+
+
+                Console.WriteLine("Appointments Found: " + todaysAppointments.Count);
+                foreach (var a in todaysAppointments)
+                {
+                    Console.WriteLine("APPT -> Date: " + a.Date + " | Estimated: " + a.EstimatedTime);
+                }
+
+
+
+
                 if (!todaysAppointments.Any())
                 {
                     await transaction.CommitAsync();
