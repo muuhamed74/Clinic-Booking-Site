@@ -844,6 +844,14 @@ namespace Clinic.Service
                     var overrideForDay = await _unitOfWork.Reposit<BookingOverride>()
                         .GetEntityWithSpec(new BookingOverrideByDateSpecification(candidateDayUtc));
 
+                    bool isWorkingDay = workingDays.Contains(candidateDayLocal.DayOfWeek) || overrideForDay != null;
+
+                    if (!isWorkingDay)
+                    {
+                        return batch;
+                    }
+
+
                     if (overrideForDay != null && overrideForDay.IsClosed)
                     {
                         return batch;
