@@ -117,6 +117,23 @@ namespace Clinic.Service
                         if (existingAppointment != null)
                             throw new ArgumentException("لا يمكنك الحجز أكثر من مرة في نفس اليوم.");
                     }
+
+                    var nameParts = request.Name.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                    if (nameParts.Length < 3)
+                    {
+                        throw new ArgumentException("يجب إدخال اسم ثلاثي .");
+                    }
+
+                    var existingAppointmentByNameSpec = new AppointmentByDateAndNameSpecification(request.Name.Trim(), bookingDateUtc);
+
+                    var existingAppointmentByName = await _unitOfWork.Reposit<Appointment>()
+                        .GetEntityWithSpec(existingAppointmentByNameSpec);
+
+                    if (existingAppointmentByName != null)
+                    {
+                        throw new ArgumentException("يوجد حجز مسبق بهاذا الاسم");
+                    }
                     #endregion
 
 
