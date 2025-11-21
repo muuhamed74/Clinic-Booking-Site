@@ -10,12 +10,12 @@ namespace Clinic.Domain.Specifications.Clinic.Specifications
 {
     public class AppointmentByDateAndNameSpecification : BaseSpecification<Appointment>
     {
-        public AppointmentByDateAndNameSpecification(string fullName, DateTime utcDate)
+        public AppointmentByDateAndNameSpecification(string normalizedName, DateTime utcDate)
         : base(a => a.Date.HasValue &&
                     a.Date.Value >= DateTime.SpecifyKind(utcDate.Date, DateTimeKind.Utc) &&
                     a.Date.Value < DateTime.SpecifyKind(utcDate.Date.AddDays(1), DateTimeKind.Utc) &&
                     a.Status != AppointmentStatus.Cancelled &&
-                    a.PatientName == fullName)
+                    a.PatientName == normalizedName)
         {
         }
     }
