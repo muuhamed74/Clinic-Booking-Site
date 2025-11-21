@@ -121,7 +121,7 @@ namespace Clinic.Service
 
                     var nameParts = normalizedName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                    if (nameParts.Length < 3)
+                    if (nameParts.Length != 3)
                     {
                         throw new ArgumentException("يجب إدخال اسم ثلاثي .");
                     }
