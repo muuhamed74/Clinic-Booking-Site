@@ -133,7 +133,7 @@ namespace Clinic.Service
 
                     if (existingAppointmentByName != null)
                     {
-                        throw new ArgumentException("يوجد حجز مسبق بهاذا الاسم");
+                        throw new ArgumentException("يوجد حجز مسبق بنفس الاسم");
                     }
                     #endregion
 
