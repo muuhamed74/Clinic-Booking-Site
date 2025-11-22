@@ -697,7 +697,7 @@ namespace Clinic.Service
             try
             {
                 TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-                DateTime dateEgyptLocal = DateTime.SpecifyKind(request.Date.Value.Date, DateTimeKind.Unspecified);
+                DateTime dateEgyptLocal = request.Date.Value;
                 DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
 
                 var bookingOverrideRepo = _unitOfWork.Reposit<BookingOverride>();
