@@ -555,228 +555,224 @@ namespace Clinic.Service
 
         public async Task<BookingOverrideDto> UpsertBookingOverrideAsync(BookingOverrideDto request)
         {
-           
-            await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
+            TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+            DateTime dateEgyptLocal = request.Date.Value;
+            DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
 
-            try
+            var bookingOverrideRepo = _unitOfWork.Reposit<BookingOverride>();
+
+            var existingOverride = await bookingOverrideRepo
+                .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
+
+            BookingOverride entity;
+
+            if (existingOverride != null)
             {
-                TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-                DateTime dateEgyptLocal = request.Date.Value;
-                DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
-
-                var bookingOverrideRepo = _unitOfWork.Reposit<BookingOverride>();
-                var existingOverride = await bookingOverrideRepo
-                    .GetEntityWithSpec(new BookingOverrideByDateSpecification(dateUtc));
-
-                BookingOverride entity;
-
-                if (existingOverride != null)
+                existingOverride.ClinicStartTime = request.ClinicStartTime;
+                existingOverride.ClinicEndTime = request.ClinicEndTime;
+                existingOverride.Date = dateUtc;
+                bookingOverrideRepo.Update(existingOverride);
+                entity = existingOverride;
+            }
+            else
+            {
+                entity = new BookingOverride
                 {
-                    existingOverride.ClinicStartTime = request.ClinicStartTime;
-                    existingOverride.ClinicEndTime = request.ClinicEndTime;
-                    existingOverride.Date = dateUtc;
-                    bookingOverrideRepo.Update(existingOverride);
-                    entity = existingOverride;
-                }
-                else
-                {
-                    entity = new BookingOverride
-                    {
-                        Date = dateUtc,
-                        ClinicStartTime = request.ClinicStartTime,
-                        ClinicEndTime = request.ClinicEndTime
-                    };
-                    await bookingOverrideRepo.AddAsync(entity);
-                }
+                    Date = dateUtc,
+                    ClinicStartTime = request.ClinicStartTime,
+                    ClinicEndTime = request.ClinicEndTime
+                };
+                await bookingOverrideRepo.AddAsync(entity);
+            }
 
+
+            var todaysAppointments = await _unitOfWork
+                .Reposit<Appointment>()
+                .ListAsync(new AppointmentByDateSpecification(dateUtc));
+
+            if (!todaysAppointments.Any())
+            {
                 await _unitOfWork.CompleteAsync();
-                await transaction.CommitAsync();
 
+                var dtoEmpty = _mapper.Map<BookingOverrideDto>(entity);
+                dtoEmpty.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
+                return dtoEmpty;
+            }
 
-                var todaysAppointments = await _unitOfWork.Reposit<Appointment>()
-                    .ListAsync(new AppointmentByDateSpecification(dateUtc));
+            int minutesPerCase = _settings.Value.MinutesPerCase;
 
-                if (!todaysAppointments.Any())
+            var appointmentsLocal = todaysAppointments
+                .Where(a => a.EstimatedTime.HasValue)
+                .Select(a => new
                 {
-                    await transaction.CommitAsync();
-                    var dtoEmpty = _mapper.Map<BookingOverrideDto>(entity);
-                    dtoEmpty.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
-                    return dtoEmpty;
+                    Entity = a,
+                    LocalTime = TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone)
+                })
+                .OrderBy(x => x.LocalTime)
+                .ToList();
+
+            var clinicOpenLocal = dateEgyptLocal.Add((request.ClinicStartTime ?? _settings.Value.ClinicStartTime).Value);
+            var clinicCloseLocal = dateEgyptLocal.Add((request.ClinicEndTime ?? _settings.Value.ClinicEndTime).Value);
+
+            var nowEgyptLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, egyptZone);
+            bool isCurrentDay = dateEgyptLocal == nowEgyptLocal.Date;
+
+            var slotsToday = new List<DateTime>();
+            var slotPointer = clinicOpenLocal;
+
+            while (slotPointer < clinicCloseLocal)
+            {
+                if (!isCurrentDay || slotPointer >= nowEgyptLocal)
+                    slotsToday.Add(slotPointer);
+
+                slotPointer = slotPointer.AddMinutes(minutesPerCase);
+            }
+
+            var occupied = new HashSet<DateTime>();
+            var toReschedule = new List<Appointment>();
+
+
+            foreach (var apptLocal in appointmentsLocal)
+            {
+                var appt = apptLocal.Entity;
+                DateTime slotCandidate = slotsToday.FirstOrDefault(s => s >= apptLocal.LocalTime && !occupied.Contains(s));
+
+                if (slotCandidate == default)
+                    slotCandidate = slotsToday.FirstOrDefault(s => !occupied.Contains(s));
+
+                if (slotCandidate == default)
+                {
+                    toReschedule.Add(appt);
+                    continue;
                 }
 
-                int minutesPerCase = _settings.Value.MinutesPerCase;
+                occupied.Add(slotCandidate);
+                var newUtc = TimeZoneInfo.ConvertTimeToUtc(slotCandidate, egyptZone);
 
-                var appointmentsLocal = todaysAppointments
-                    .Where(a => a.EstimatedTime.HasValue)
-                    .Select(a => new
-                    {
-                        Entity = a,
-                        LocalTime = TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone)
-                    })
-                    .OrderBy(x => x.LocalTime)
-                    .ToList();
-
-                var clinicOpenLocal = dateEgyptLocal.Add((request.ClinicStartTime ?? _settings.Value.ClinicStartTime).Value);
-                var clinicCloseLocal = dateEgyptLocal.Add((request.ClinicEndTime ?? _settings.Value.ClinicEndTime).Value);
-                var nowEgyptLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, egyptZone);
-                var isCurrentDay = dateEgyptLocal == nowEgyptLocal.Date;
-
-                var slotsToday = new List<DateTime>();
-                var slotPointer = clinicOpenLocal;
-                while (slotPointer < clinicCloseLocal)
+                if (!appt.EstimatedTime.HasValue || appt.EstimatedTime.Value != newUtc)
                 {
-                    if (!isCurrentDay || slotPointer >= nowEgyptLocal)
-                        slotsToday.Add(slotPointer);
-                    slotPointer = slotPointer.AddMinutes(minutesPerCase);
+                    appt.EstimatedTime = newUtc;
+                    appt.Date = dateUtc;
+                    appt.Status = AppointmentStatus.Rescheduled;
+
+                    _unitOfWork.Reposit<Appointment>().Update(appt);
+
+                    var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                        .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
+
+                    if (archiveAppt != null)
+                    {
+                        archiveAppt.EstimatedTime = appt.EstimatedTime;
+                        archiveAppt.Date = appt.Date;
+                        archiveAppt.Status = appt.Status;
+
+                        _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+                    }
                 }
+            }
 
-                var occupied = new HashSet<DateTime>();
-                var toReschedule = new List<Appointment>();
+            var workingDays = new HashSet<DayOfWeek>
+    {
+        (DayOfWeek)ClinicWorkingDays.Saturday,
+        (DayOfWeek)ClinicWorkingDays.Sunday,
+        (DayOfWeek)ClinicWorkingDays.Tuesday,
+        (DayOfWeek)ClinicWorkingDays.Wednesday
+    };
 
-                foreach (var apptLocal in appointmentsLocal)
+            DateTime GetNextWorkingDay(DateTime fromLocal)
+            {
+                var next = fromLocal.AddDays(1);
+                while (!workingDays.Contains(next.DayOfWeek))
+                    next = next.AddDays(1);
+                return next;
+            }
+
+            async Task<List<Appointment>> PlaceRemainingOnNextDays(List<Appointment> batch, DateTime? startDay)
+            {
+                var remaining = batch;
+                DateTime day = startDay ?? dateEgyptLocal;
+
+                while (remaining.Any())
                 {
-                    var appt = apptLocal.Entity;
-                    DateTime slotCandidate = slotsToday.FirstOrDefault(s => s >= apptLocal.LocalTime && !occupied.Contains(s));
-                    if (slotCandidate == default(DateTime))
-                        slotCandidate = slotsToday.FirstOrDefault(s => !occupied.Contains(s));
+                    day = GetNextWorkingDay(day);
+                    var candidateDayUtc = TimeZoneInfo.ConvertTimeToUtc(day.Date, egyptZone);
 
-                    if (slotCandidate == default(DateTime))
-                    {
-                        toReschedule.Add(appt);
+                    var overrideForDay = await _unitOfWork.Reposit<BookingOverride>()
+                        .GetEntityWithSpec(new BookingOverrideByDateSpecification(candidateDayUtc));
+
+                    if (overrideForDay != null && overrideForDay.IsClosed)
                         continue;
+
+                    var dayStart = day.Date.Add((overrideForDay?.ClinicStartTime ?? _settings.Value.ClinicStartTime).Value);
+                    var dayEnd = day.Date.Add((overrideForDay?.ClinicEndTime ?? _settings.Value.ClinicEndTime).Value);
+
+                    var existingOnDay = (await _unitOfWork.Reposit<Appointment>()
+                        .ListAsync(new AppointmentByDateSpecification(candidateDayUtc)))
+                        .Where(a => a.EstimatedTime.HasValue)
+                        .Select(a => TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone))
+                        .OrderBy(t => t)
+                        .ToHashSet();
+
+                    var candidateSlots = new List<DateTime>();
+                    var cur = dayStart;
+
+                    while (cur < dayEnd)
+                    {
+                        if (!existingOnDay.Contains(cur))
+                            candidateSlots.Add(cur);
+
+                        cur = cur.AddMinutes(minutesPerCase);
                     }
 
-                    occupied.Add(slotCandidate);
-                    var newUtc = TimeZoneInfo.ConvertTimeToUtc(slotCandidate, egyptZone);
+                    var placed = new List<Appointment>();
 
-                    if (!appt.EstimatedTime.HasValue || appt.EstimatedTime.Value != newUtc)
+                    for (int i = 0; i < candidateSlots.Count && i < remaining.Count; i++)
                     {
+                        var appt = remaining[i];
+                        var slot = candidateSlots[i];
+                        var newUtc = TimeZoneInfo.ConvertTimeToUtc(slot, egyptZone);
+
                         appt.EstimatedTime = newUtc;
-                        appt.Date = dateUtc;
+                        appt.Date = candidateDayUtc;
                         appt.Status = AppointmentStatus.Rescheduled;
+
                         _unitOfWork.Reposit<Appointment>().Update(appt);
 
-                        
                         var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
                             .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
+
                         if (archiveAppt != null)
                         {
                             archiveAppt.EstimatedTime = appt.EstimatedTime;
                             archiveAppt.Date = appt.Date;
                             archiveAppt.Status = appt.Status;
+
                             _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
                         }
-                    }
-                }
 
-                var workingDays = new HashSet<DayOfWeek>
-                {
-                  (DayOfWeek)ClinicWorkingDays.Saturday,
-                  (DayOfWeek)ClinicWorkingDays.Sunday,
-                  (DayOfWeek)ClinicWorkingDays.Tuesday,
-                  (DayOfWeek)ClinicWorkingDays.Wednesday
-                };
-
-                DateTime GetNextWorkingDay(DateTime fromLocal)
-                {
-                    var next = fromLocal.AddDays(1);
-                    while (!workingDays.Contains(next.DayOfWeek))
-                        next = next.AddDays(1);
-                    return next;
-                }
-
-                await PlaceRemainingOnNextDays(toReschedule, dateEgyptLocal);
-
-
-                async Task<List<Appointment>> PlaceRemainingOnNextDays(List<Appointment> batch, DateTime? startDay)
-                {
-                    var remaining = batch;
-
-                    DateTime day = startDay ?? dateEgyptLocal;
-
-                    while (remaining.Any())
-                    {
-                        day = GetNextWorkingDay(day);
-
-                        var candidateDayUtc = TimeZoneInfo.ConvertTimeToUtc(day.Date, egyptZone);
-                        var overrideForDay = await _unitOfWork.Reposit<BookingOverride>()
-                            .GetEntityWithSpec(new BookingOverrideByDateSpecification(candidateDayUtc));
-
-                        if (overrideForDay != null && overrideForDay.IsClosed)
-                            continue;
-
-                        var dayStart = day.Date.Add((overrideForDay?.ClinicStartTime ?? _settings.Value.ClinicStartTime).Value);
-                        var dayEnd = day.Date.Add((overrideForDay?.ClinicEndTime ?? _settings.Value.ClinicEndTime).Value);
-
-                        var existingOnDay = (await _unitOfWork.Reposit<Appointment>()
-                            .ListAsync(new AppointmentByDateSpecification(candidateDayUtc)))
-                            .Where(a => a.EstimatedTime.HasValue)
-                            .Select(a => TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone))
-                            .OrderBy(t => t)
-                            .ToHashSet();
-
-                        var candidateSlots = new List<DateTime>();
-                        var cur = dayStart;
-                        while (cur < dayEnd)
-                        {
-                            if (!existingOnDay.Contains(cur))
-                                candidateSlots.Add(cur);
-                            cur = cur.AddMinutes(minutesPerCase);
-                        }
-
-                        var placed = new List<Appointment>();
-                        for (int i = 0; i < candidateSlots.Count && i < remaining.Count; i++)
-                        {
-                            var appt = remaining[i];
-                            var slot = candidateSlots[i];
-                            var newUtc = TimeZoneInfo.ConvertTimeToUtc(slot, egyptZone);
-
-                            appt.EstimatedTime = newUtc;
-                            appt.Date = candidateDayUtc;
-                            appt.Status = AppointmentStatus.Rescheduled;
-                            _unitOfWork.Reposit<Appointment>().Update(appt);
-
-                            var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
-                                .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
-                            if (archiveAppt != null)
-                            {
-                                archiveAppt.EstimatedTime = appt.EstimatedTime;
-                                archiveAppt.Date = appt.Date;
-                                archiveAppt.Status = appt.Status;
-                                _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
-                            }
-
-                            placed.Add(appt);
-                        }
-
-                        remaining = remaining.Skip(placed.Count).ToList();
+                        placed.Add(appt);
                     }
 
-                    return remaining;
+                    remaining = remaining.Skip(placed.Count).ToList();
                 }
 
-
-                await _unitOfWork.CompleteAsync();
-                await transaction.CommitAsync();
-
-                foreach (var ap in todaysAppointments)
-                {
-                    try
-                    {
-                        await _notificationService.SendStatusChangedAsync(ap);
-                    }
-                    catch { }
-                }
-
-                var dto = _mapper.Map<BookingOverrideDto>(entity);
-                dto.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
-                return dto;
+                return remaining;
             }
-            catch
+
+            await PlaceRemainingOnNextDays(toReschedule, dateEgyptLocal);
+
+            await _unitOfWork.CompleteAsync();
+
+            foreach (var ap in todaysAppointments)
             {
-                await transaction.RollbackAsync();
-                throw;
+                try { await _notificationService.SendStatusChangedAsync(ap); }
+                catch { }
             }
+
+            var dto = _mapper.Map<BookingOverrideDto>(entity);
+            dto.Date = TimeZoneInfo.ConvertTimeFromUtc(entity.Date.Value, egyptZone);
+
+            return dto;
         }
     }
 
