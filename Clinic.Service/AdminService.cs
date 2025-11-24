@@ -550,9 +550,9 @@ namespace Clinic.Service
 
 
 
-        //Not Used Yet
+        //_Not Used Yet
 
-
+        // _____Added to app_____
         public async Task<BookingOverrideDto> UpsertBookingOverrideAsync(BookingOverrideDto request)
         {
             await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);

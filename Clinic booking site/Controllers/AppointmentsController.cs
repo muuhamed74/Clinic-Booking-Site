@@ -34,5 +34,18 @@ namespace Clinic_booking_site.Controllers
 
             return Ok(appointment);
         }
+
+        [HttpPost("cancel-by-patient")]
+        public async Task<ActionResult<AppointmentDto>> CancelByPatientAsync([FromQuery] string phoneNumber, [FromQuery] DateTime date)
+        {
+
+            var result = await _bookingService.CancelByPatientAsync(phoneNumber, date);
+            if (result == null)
+                return NotFound(new ApiResponce(400, "لا يوجد حجز بهذا الرقم في هذا اليوم."));
+
+            return Ok(result);
+        }
+
+
     }
 }

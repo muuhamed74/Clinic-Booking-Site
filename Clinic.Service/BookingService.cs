@@ -305,6 +305,113 @@ namespace Clinic.Service
 
 
 
+        public async Task<AppointmentDto> CancelByPatientAsync(string phone, DateTime date)
+        {
+            var egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
+            var dateUtc = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+
+            var spec = new AppointmentByDateAndPhoneSpecification(phone, dateUtc);
+            var appointment = await _unitOfWork.Reposit<Appointment>().GetEntityWithSpec(spec);
+
+            if (appointment == null)
+                throw new KeyNotFoundException("لا يوجد حجز بهذا الرقم في هذا اليوم.");
+
+            if (appointment.Status == AppointmentStatus.Cancelled)
+                throw new InvalidOperationException("هذا الحجز ملغٍ بالفعل.");
+
+            var appointmentDate = TimeZoneInfo.ConvertTimeFromUtc(
+                appointment.EstimatedTime.Value,
+                egyptZone
+            ).Date;
+
+            await using var transaction = await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable);
+
+            try
+            {
+                var oldQueue = appointment.QueueNumber;
+                var oldEstimated = appointment.EstimatedTime;
+
+                var allAppointmentsToday = await _unitOfWork.Reposit<Appointment>()
+                    .GetAllWithSpecAsync(new AppointmentsWithPatientsSpecification());
+
+                var remainingAppointments = allAppointmentsToday
+                    .Where(a =>
+                    {
+                        var apptDate = TimeZoneInfo.ConvertTimeFromUtc(
+                            a.EstimatedTime.Value,
+                            egyptZone
+                        ).Date;
+
+                        return apptDate == appointmentDate &&
+                               a.Id != appointment.Id &&
+                               (a.Status == AppointmentStatus.Waiting || a.Status == AppointmentStatus.Rescheduled);
+                    })
+                    .OrderBy(a => a.QueueNumber)
+                    .ToList();
+
+                var affectedAppointments = remainingAppointments
+                    .Where(a => a.QueueNumber > oldQueue)
+                    .OrderBy(a => a.QueueNumber)
+                    .ToList();
+
+                appointment.Status = AppointmentStatus.Cancelled;
+
+                await _notificationService.SendStatusChangedAsync(appointment);
+
+                var archiveAppointment = await _unitOfWork.Reposit<AppointmentArchive>()
+                    .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
+
+                if (archiveAppointment != null)
+                    _unitOfWork.Reposit<AppointmentArchive>().Delete(archiveAppointment);
+
+                _unitOfWork.Reposit<Appointment>().Delete(appointment);
+
+                await _unitOfWork.CompleteAsync();
+
+                int newQueue = oldQueue;
+                DateTime currentTime = oldEstimated.Value;
+
+                foreach (var appt in affectedAppointments)
+                {
+                    var archiveAppt = await _unitOfWork.Reposit<AppointmentArchive>()
+                        .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appt.Id));
+
+                    archiveAppt.QueueNumber = appt.QueueNumber;
+                    archiveAppt.EstimatedTime = appt.EstimatedTime;
+                    archiveAppt.Status = appt.Status;
+                    archiveAppt.Date = appt.Date;
+
+                    _unitOfWork.Reposit<AppointmentArchive>().Update(archiveAppt);
+
+                    appt.QueueNumber = newQueue++;
+                    appt.EstimatedTime = currentTime;
+                    appt.Status = AppointmentStatus.Rescheduled;
+
+                    currentTime = currentTime.AddMinutes(_settings.MinutesPerCase);
+
+                    _unitOfWork.Reposit<Appointment>().Update(appt);
+                }
+
+                await _unitOfWork.CompleteAsync();
+
+                
+                foreach (var appt in affectedAppointments)
+                {
+                    await _notificationService.SendStatusChangedAsync(appt);
+                }
+
+                await transaction.CommitAsync();
+
+                return _mapper.Map<AppointmentDto>(appointment);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+
 
 
 
