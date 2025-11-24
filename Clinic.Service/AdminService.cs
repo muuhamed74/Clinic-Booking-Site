@@ -560,8 +560,15 @@ namespace Clinic.Service
             {
                 TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
 
-                var dateEgyptLocal = DateTime.SpecifyKind(request.Date.Value.Date, DateTimeKind.Unspecified);
-                var dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
+                //var dateEgyptLocal = DateTime.SpecifyKind(request.Date.Value.Date, DateTimeKind.Unspecified);
+                //var dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
+
+                // الكود بقا متلصم
+                DateTime dateEgyptLocal = DateTime.SpecifyKind(request.Date.Value.Date, DateTimeKind.Unspecified);
+                DateTime dateUtc = TimeZoneInfo.ConvertTimeToUtc(dateEgyptLocal, egyptZone);
+                if (dateUtc.Date < dateEgyptLocal.Date)
+                    dateUtc = dateUtc.AddDays(1);
+
 
                 var bookingOverrideRepo = _unitOfWork.Reposit<BookingOverride>();
                 var appointmentRepo = _unitOfWork.Reposit<Appointment>();
