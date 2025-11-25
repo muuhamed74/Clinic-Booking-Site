@@ -28,7 +28,7 @@ namespace Clinic.Service.Notifications_Providers
         public async Task SendAsync(string toPhoneNumber, int templateId, List<string>? variables = null)
         {
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("gsor-token", _token);
+            client.DefaultRequestHeaders.Add("beon-token", _token);
 
             var payload = new Dictionary<string, object?>
             {
