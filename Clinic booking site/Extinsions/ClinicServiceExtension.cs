@@ -42,6 +42,7 @@ namespace Clinic_booking_site.Extinsions
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ReminderJob>();
+            services.AddScoped<IDoctorAnnouncementService, DoctorAnnouncementService>();
 
             // For Development:
             services.AddScoped<IMessageProvider, NewSmsProvider>();

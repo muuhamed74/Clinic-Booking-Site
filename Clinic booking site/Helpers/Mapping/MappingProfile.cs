@@ -49,7 +49,8 @@ namespace Clinic_booking_site.Helpers.Mapping
                 .ForMember(dest => dest.ClinicStartTime, opt => opt.MapFrom(src => src.ClinicStartTime))
                 .ForMember(dest => dest.ClinicEndTime, opt => opt.MapFrom(src => src.ClinicEndTime));
 
-           
+            CreateMap<DoctorAnnouncement, DoctorAnnouncementDto>().ReverseMap();
+
 
         }
     }

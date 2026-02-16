@@ -349,14 +349,20 @@ namespace Clinic.Service
 
                 var newDateEgypt = DateTime.SpecifyKind(requestDto.NewTime.Date, DateTimeKind.Unspecified);
                 var oldDateEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.EstimatedTime.Value, egyptZone).Date;
+                var nowEgypt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, egyptZone);
+
 
                 if (newDateEgypt == oldDateEgypt)
                     throw new ArgumentException("لا يمكن تغيير المعاد لنفس اليوم.");
 
                 var newDateUtc = TimeZoneInfo.ConvertTimeToUtc(newDateEgypt, egyptZone);
 
+                //add
+                var overrideDate = newDateEgypt.Date;
+
+
                 var overrideSetting = await _unitOfWork.Reposit<BookingOverride>()
-                    .GetEntityWithSpec(new BookingOverrideByDateSpecification(newDateUtc));
+                    .GetEntityWithSpec(new BookingOverrideByDateSpecification(overrideDate));
 
                 if (overrideSetting != null && overrideSetting.IsClosed)
                     throw new ArgumentException("لا يمكن نقل الموعد ليوم مغلق.");
@@ -376,28 +382,72 @@ namespace Clinic.Service
 
                 var clinicOpenEgypt = newDateEgypt.Add(clinicStart);
                 var clinicCloseEgypt = newDateEgypt.Add(clinicEnd);
+
                 var clinicOpenUtc = TimeZoneInfo.ConvertTimeToUtc(clinicOpenEgypt, egyptZone);
                 var clinicCloseUtc = TimeZoneInfo.ConvertTimeToUtc(clinicCloseEgypt, egyptZone);
 
+                //*** edit
                 var allAppointments = await _unitOfWork.Reposit<Appointment>()
                     .GetAllWithSpecAsync(new AppointmentsWithPatientsSpecification());
 
-                var sameDayAppointments = allAppointments
-                    .Where(a =>
-                        a.EstimatedTime.HasValue &&
-                        TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone).Date == newDateEgypt &&
-                        (a.Status == AppointmentStatus.Waiting ||
-                         a.Status == AppointmentStatus.Rescheduled))
+
+                var spec = new AppointmentByDateSpecification(newDateUtc);
+                var sameDayAppointments = await _unitOfWork
+                    .Reposit<Appointment>()
+                    .ListAsync(spec);
+
+                sameDayAppointments = sameDayAppointments
+                    .Where(a => a.Id != appointment.Id &&
+                    (a.Status == AppointmentStatus.Waiting ||
+                    a.Status == AppointmentStatus.Rescheduled))
                     .OrderBy(a => a.EstimatedTime)
                     .ToList();
 
+
+
+                //var sameDayAppointments = allAppointments
+                //    .Where(a =>
+                //        a.EstimatedTime.HasValue &&
+                //        TimeZoneInfo.ConvertTimeFromUtc(a.EstimatedTime.Value, egyptZone).Date == newDateEgypt &&
+                //        (a.Status == AppointmentStatus.Waiting ||
+                //         a.Status == AppointmentStatus.Rescheduled))
+                //    .OrderBy(a => a.EstimatedTime)
+                //    .ToList();
+
+
+
+                //***
+
+                ////////////// Add
+                DateTime startTimeEgypt;
+
+                if (newDateEgypt.Date == nowEgypt.Date)
+                {
+                    startTimeEgypt = nowEgypt > clinicOpenEgypt
+                        ? nowEgypt
+                        : clinicOpenEgypt;
+                }
+                else
+                {
+                    startTimeEgypt = clinicOpenEgypt;
+                }
+
+                var startTimeUtc = TimeZoneInfo.ConvertTimeToUtc(startTimeEgypt, egyptZone);
+                /////////
+
+                //edit
                 DateTime newUtcTime;
                 if (sameDayAppointments.Any())
                 {
                     var lastEstimatedUtc = sameDayAppointments.Last().EstimatedTime.Value;
                     var lastEstimatedEgypt = TimeZoneInfo.ConvertTimeFromUtc(lastEstimatedUtc, egyptZone);
                     var nextAvailableEgypt = lastEstimatedEgypt.AddMinutes(minutesPerCase);
-                    var startTimeEgypt = new[] { clinicOpenEgypt, nextAvailableEgypt }.Max();
+
+                    var finalStartEgypt = new[] 
+                    {
+                        clinicOpenEgypt, nextAvailableEgypt 
+                    }.Max();
+
                     newUtcTime = TimeZoneInfo.ConvertTimeToUtc(startTimeEgypt, egyptZone);
                 }
                 else
@@ -407,6 +457,8 @@ namespace Clinic.Service
 
                 if (newUtcTime >= clinicCloseUtc)
                     throw new ArgumentException("لا يوجد مواعيد متاحة في اليوم الجديد.");
+
+
 
                 var followingAppointments = allAppointments
                     .Where(a =>

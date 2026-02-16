@@ -208,6 +208,26 @@ namespace Clinic.Repo.Migrations
                     b.ToTable("BookingOverride");
                 });
 
+            modelBuilder.Entity("Clinic.Domain.Entities.DoctorAnnouncement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DoctorAnnouncements");
+                });
+
             modelBuilder.Entity("Clinic.Domain.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")

@@ -19,6 +19,8 @@ namespace Clinic.Repo.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<BookingOverride> BookingOverride { get; set; }
+        public DbSet<DoctorAnnouncement> DoctorAnnouncements { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
