@@ -81,8 +81,17 @@ namespace Clinic.Service
         private async Task SendInternalAsync(Appointment appointment, int templateId, NotificationType type)
         {
             TimeZoneInfo egyptZone = TimeZoneInfo.FindSystemTimeZoneById("Africa/Cairo");
-            var estimatedTimeEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.EstimatedTime.Value, egyptZone);
-            var dateEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.Date.Value, egyptZone);
+            //var estimatedTimeEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.EstimatedTime.Value, egyptZone);
+            //var dateEgypt = TimeZoneInfo.ConvertTimeFromUtc(appointment.Date.Value, egyptZone);
+
+            var utcTime = DateTime.SpecifyKind(appointment.EstimatedTime.Value, DateTimeKind.Utc);
+
+            var egyptFullTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, egyptZone);
+
+            var arCulture = new CultureInfo("ar-EG");
+
+            string formattedDate = egyptFullTime.ToString("yyyy/MM/dd", arCulture);
+            string formattedHour = egyptFullTime.ToString("hh:mm tt", arCulture);
 
 
             List<string> variables = templateId switch
@@ -90,8 +99,8 @@ namespace Clinic.Service
                 710 => new()
             {
             appointment.PatientName,
-            dateEgypt.ToString("yyyy/MM/dd", new CultureInfo("ar-EG")),
-            estimatedTimeEgypt.ToString("hh:mm tt", new CultureInfo("ar-EG")),
+            formattedDate,
+            formattedHour,
             appointment.QueueNumber.ToString()
             },
                 711 => new()
@@ -101,14 +110,14 @@ namespace Clinic.Service
                 712 => new()
             {
             appointment.PatientName,
-            dateEgypt.ToString("yyyy/MM/dd", new CultureInfo("ar-EG")),
-            estimatedTimeEgypt.ToString("hh:mm tt", new CultureInfo("ar-EG")),
+            formattedDate,
+            formattedHour,
             appointment.QueueNumber.ToString()
             },
                 713 => new()
             {
             appointment.PatientName,
-            estimatedTimeEgypt.ToString("hh:mm tt", new CultureInfo("ar-EG"))
+            formattedHour
             },
                 _ => new()
             };

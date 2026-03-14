@@ -271,12 +271,43 @@ namespace Clinic.Service
                     throw new ArgumentException("لا يمكن تغيير المعاد ليوم مختلف.");
 
 
-                var clinicOpenTime = new TimeSpan(11, 30, 0);
-                var clinicCloseTime = new TimeSpan(22, 0, 0);
+                //var clinicOpenTime = new TimeSpan(11, 30, 0);
+                //var clinicCloseTime = new TimeSpan(22, 0, 0);
+                //var newTimeOfDay = newEgyptTime.TimeOfDay;
+
+                //if (newTimeOfDay < clinicOpenTime || newTimeOfDay > clinicCloseTime)
+                //    throw new InvalidOperationException($"أوقات العيادة من {clinicOpenTime:hh\\:mm} صباحاً إلى {clinicCloseTime:hh\\:mm} مساءً.");
+
+
+
+
+
+
+                var overrideSetting = await _unitOfWork.Reposit<BookingOverride>()
+                       .GetEntityWithSpec(new BookingOverrideByDateSpecification(appointmentDate));
+
+                TimeSpan clinicOpenTime, clinicCloseTime;
+
+                if (overrideSetting != null)
+                {
+                    clinicOpenTime = overrideSetting.ClinicStartTime.Value;
+                    clinicCloseTime = overrideSetting.ClinicEndTime.Value;
+                }
+                else
+                {
+                    clinicOpenTime = _settings.Value.ClinicStartTime.Value;
+                    clinicCloseTime = _settings.Value.ClinicEndTime.Value;
+                }
+
                 var newTimeOfDay = newEgyptTime.TimeOfDay;
 
                 if (newTimeOfDay < clinicOpenTime || newTimeOfDay > clinicCloseTime)
-                    throw new InvalidOperationException($"أوقات العيادة من {clinicOpenTime:hh\\:mm} صباحاً إلى {clinicCloseTime:hh\\:mm} مساءً.");
+                    throw new InvalidOperationException($"أوقات العيادة لهذا اليوم من {clinicOpenTime:hh\\:mm} إلى {clinicCloseTime:hh\\:mm}.");
+
+
+
+
+
 
 
                 appointment.EstimatedTime = newUtcTime;
