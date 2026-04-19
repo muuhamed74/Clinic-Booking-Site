@@ -41,7 +41,7 @@ namespace Clinic.Service
             {
                 case AppointmentStatus.Waiting:
                     if (_notificationSettings.SendBookingConfirmation)
-                        await SendInternalAsync( appointment, templateId: 710 ,NotificationType.BookingConfirmation);
+                        await SendInternalAsync( appointment, templateId: 8612 ,NotificationType.BookingConfirmation);
                     break;
 
 
@@ -50,11 +50,11 @@ namespace Clinic.Service
 
                 case AppointmentStatus.Cancelled:
                     if (_notificationSettings.SendCancellation)
-                        await SendInternalAsync(appointment,templateId: 711, NotificationType.Cancellation);
+                        await SendInternalAsync(appointment,templateId: 8613, NotificationType.Cancellation);
                     break;
 
                 case AppointmentStatus.Rescheduled: 
-                    await SendInternalAsync(appointment,templateId: 712, NotificationType.Rescheduling);
+                    await SendInternalAsync(appointment,templateId: 8614, NotificationType.Rescheduling);
                     break;
 
                 default:
@@ -73,7 +73,7 @@ namespace Clinic.Service
             if (!_notificationSettings.SendReminder)
                 return;
 
-            await SendInternalAsync(appointment,templateId: 713, NotificationType.Reminder);
+            await SendInternalAsync(appointment,templateId: 8615, NotificationType.Reminder);
         }
 
 
@@ -96,25 +96,29 @@ namespace Clinic.Service
 
             List<string> variables = templateId switch
             {
-                710 => new()
+                //710 => new()
+                8612 => new()
             {
             appointment.PatientName,
             formattedDate,
             formattedHour,
             appointment.QueueNumber.ToString()
             },
-                711 => new()
+                // 711 => new()
+                8613 => new()
             {
                 appointment.PatientName
             },
-                712 => new()
+                // 712 => new()
+                8614 => new()
             {
             appointment.PatientName,
             formattedDate,
             formattedHour,
             appointment.QueueNumber.ToString()
             },
-                713 => new()
+                // 713 => new()
+                8615 => new()
             {
             appointment.PatientName,
             formattedHour
