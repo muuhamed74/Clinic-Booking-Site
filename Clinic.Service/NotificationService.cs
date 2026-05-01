@@ -93,13 +93,15 @@ namespace Clinic.Service
             string formattedDate = egyptFullTime.ToString("yyyy/MM/dd", arCulture);
             string formattedHour = egyptFullTime.ToString("hh:mm tt", arCulture);
 
+            var firstName = appointment.PatientName?.Split(' ').FirstOrDefault() ?? string.Empty;
+
 
             List<string> variables = templateId switch
             {
                 //710 => new()
                 8612 => new()
             {
-            appointment.PatientName,
+            firstName,
             formattedDate,
             formattedHour,
             appointment.QueueNumber.ToString()
@@ -107,12 +109,12 @@ namespace Clinic.Service
                 // 711 => new()
                 8613 => new()
             {
-                appointment.PatientName
+                firstName
             },
                 // 712 => new()
                 8614 => new()
             {
-            appointment.PatientName,
+            firstName,
             formattedDate,
             formattedHour,
             appointment.QueueNumber.ToString()
@@ -120,7 +122,8 @@ namespace Clinic.Service
                 // 713 => new()
                 8615 => new()
             {
-            appointment.PatientName,
+            //appointment.PatientName
+            firstName,
             formattedHour
             },
                 _ => new()
