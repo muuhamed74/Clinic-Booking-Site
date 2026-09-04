@@ -8,9 +8,8 @@ namespace Clinic.Domain.Entities
 {
     public class WhatsAppSettings
     {
-        public string BaseUrl { get; set; } = null!;
-        public string PhoneNumberId { get; set; } = null!;
-        public string AccessToken { get; set; } = null!;
-        public string FromPhoneNumber { get; set; } = null!;
+        public string ApiUrl { get; set; }
+        public string ApiToken { get; set; }
+        public string SessionId { get; set; }
     }
 }

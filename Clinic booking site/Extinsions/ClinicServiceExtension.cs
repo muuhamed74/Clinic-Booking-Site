@@ -43,6 +43,8 @@ namespace Clinic_booking_site.Extinsions
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ReminderJob>();
             services.AddScoped<IDoctorAnnouncementService, DoctorAnnouncementService>();
+            services.AddHttpClient<Iwpsenderservice, wpsenderservice>();
+            services.AddScoped<IWhatsAppProvider, WhatsAppProvider>();
 
             // For Development:
             services.AddScoped<IMessageProvider, NewSmsProvider>();

@@ -20,18 +20,21 @@ namespace Clinic.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly INotificationService _notificationService;
+        //private readonly INotificationService _notificationService;
         private readonly IOptions<BookingSettings> _settings;
+        private readonly Iwpsenderservice _wpsenderservice;
 
         public AdminService(IUnitOfWork unitOfWork,
                             IMapper mapper,
-                            INotificationService notificationService,
-                            IOptions<BookingSettings> settings)
+                            //INotificationService notificationService,
+                            IOptions<BookingSettings> settings,
+                            Iwpsenderservice wpsenderservice)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _notificationService = notificationService;
+            //_notificationService = notificationService;
             _settings = settings;
+            _wpsenderservice = wpsenderservice;
         }
 
 
@@ -131,7 +134,7 @@ namespace Clinic.Service
 
                 appointment.Status = AppointmentStatus.Cancelled;
 
-                await _notificationService.SendStatusChangedAsync(appointment);
+                await _wpsenderservice.SendStatusAsync(appointment);
 
                 var archiveAppointment = await _unitOfWork.Reposit<AppointmentArchive>()
                    .GetEntityWithSpec(new AppointmentArchiveByAppointmentIdSpecification(appointment.Id));
@@ -172,7 +175,7 @@ namespace Clinic.Service
 
                 foreach (var appt in affectedAppointments)
                 {
-                    await _notificationService.SendStatusChangedAsync(appt);
+                    await _wpsenderservice.SendStatusAsync(appt);
                 }
 
                 await transaction.CommitAsync();
@@ -314,7 +317,7 @@ namespace Clinic.Service
                 appointment.Status = AppointmentStatus.Rescheduled;
                 _unitOfWork.Reposit<Appointment>().Update(appointment);
                 await _unitOfWork.CompleteAsync();
-                await _notificationService.SendStatusChangedAsync(appointment);
+                await _wpsenderservice.SendStatusAsync(appointment);
 
 
                 var allAppointmentsToday = await _unitOfWork.Reposit<Appointment>()
@@ -347,7 +350,7 @@ namespace Clinic.Service
 
                 foreach (var appt in sameDayAppointments)
                 {
-                    await _notificationService.SendStatusChangedAsync(appt);
+                    await _wpsenderservice.SendStatusAsync(appt);
                 }
 
                 return _mapper.Map<AppointmentDto>(appointment);
@@ -556,9 +559,9 @@ namespace Clinic.Service
                 await _unitOfWork.CompleteAsync();
                 await transaction.CommitAsync();
 
-                await _notificationService.SendStatusChangedAsync(appointment);
+                await _wpsenderservice.SendStatusAsync(appointment);
                 foreach (var appt in followingAppointments)
-                    await _notificationService.SendStatusChangedAsync(appt);
+                    await _wpsenderservice.SendStatusAsync(appt);
 
                 return _mapper.Map<AppointmentDto>(appointment);
             }
@@ -610,7 +613,7 @@ namespace Clinic.Service
                 {
                     appointment.Status = AppointmentStatus.Cancelled;
 
-                    await _notificationService.SendStatusChangedAsync(appointment);
+                    await _wpsenderservice.SendStatusAsync(appointment);
                     appointmentRepo.Delete(appointment);
                 }
             }
@@ -800,7 +803,7 @@ namespace Clinic.Service
 
                         try
                         {
-                            await _notificationService.SendStatusChangedAsync(appt);
+                            await _wpsenderservice.SendStatusAsync(appt);
                         }
                         catch { }
 
@@ -813,7 +816,7 @@ namespace Clinic.Service
 
                 foreach (var ap in toNotify)
                 {
-                    try { await _notificationService.SendStatusChangedAsync(ap); }
+                    try { await _wpsenderservice.SendStatusAsync(ap); }
                     catch { }
                 }
 

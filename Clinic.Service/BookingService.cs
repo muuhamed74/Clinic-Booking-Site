@@ -21,20 +21,23 @@ namespace Clinic.Service
     public class BookingService : IBookingService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly INotificationService _notificationService;
+        //private readonly INotificationService _notificationService;
         private readonly IMapper _mapper;
         private readonly BookingSettings _settings;
+        private readonly Iwpsenderservice _wpsenderservice;
 
         public BookingService(
             IUnitOfWork unitOfWork,
-            INotificationService notificationService,
+            //INotificationService notificationService,
             IOptions<BookingSettings> settings,
-             IMapper mapper)
+             IMapper mapper,
+             Iwpsenderservice wpsenderservice)
         {
             _unitOfWork = unitOfWork;
-            _notificationService = notificationService;
+            //_notificationService = notificationService;
             _mapper = mapper;
             _settings = settings.Value;
+            _wpsenderservice = wpsenderservice;
         }
 
         public async Task<AppointmentDto> BookAppointmentAsync(AppointmentRequestDto request)
@@ -267,7 +270,7 @@ namespace Clinic.Service
 
                     dto.EstimatedTime = TimeZoneInfo.ConvertTimeFromUtc(appointment.EstimatedTime.Value, egyptZone);
                     dto.Date = TimeZoneInfo.ConvertTimeFromUtc(appointment.Date.Value, egyptZone);
-                    await _notificationService.SendStatusChangedAsync(appointment);
+                    await _wpsenderservice.SendStatusAsync(appointment);
                     return dto;
                 }
                 catch (DbUpdateException ex) when (attempt < maxRetries)

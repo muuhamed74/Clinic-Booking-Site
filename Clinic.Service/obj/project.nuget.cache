@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "fIw/NLfn3Pk=",
+  "dgSpecHash": "j1sQc8bcS0s=",
   "success": true,
   "projectFilePath": "E:\\Coding\\Clinic booking site\\Clinic.Service\\Clinic.Service.csproj",
   "expectedPackageFiles": [
@@ -127,10 +127,7 @@
     "C:\\Users\\MSI P M T\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\MSI P M T\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\MSI P M T\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
-    "C:\\Users\\MSI P M T\\.nuget\\packages\\twilio\\7.13.0\\twilio.7.13.0.nupkg.sha512",
-    "C:\\Users\\MSI P M T\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.26\\microsoft.windowsdesktop.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\MSI P M T\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.26\\microsoft.netcore.app.ref.8.0.26.nupkg.sha512",
-    "C:\\Users\\MSI P M T\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.26\\microsoft.aspnetcore.app.ref.8.0.26.nupkg.sha512"
+    "C:\\Users\\MSI P M T\\.nuget\\packages\\twilio\\7.13.0\\twilio.7.13.0.nupkg.sha512"
   ],
   "logs": [
     {
