@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Service Abstraction")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb006368aa78f27b7a1f85f19ec0e9d08a47b941")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1024b6c04de250d1ea430a309ce4adfba38c00f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Service Abstraction")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Service Abstraction")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
