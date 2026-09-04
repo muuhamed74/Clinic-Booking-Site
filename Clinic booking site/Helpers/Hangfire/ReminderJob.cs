@@ -12,17 +12,17 @@ namespace Clinic_booking_site.Helpers.Hangfire
     public class ReminderJob
     {
         private readonly IUnitOfWork _unitOfWork;
-        //private readonly INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly ILogger<ReminderJob> _logger;
         private readonly Iwpsenderservice _wpsenderservice;
 
         public ReminderJob(IUnitOfWork unitOfWork,
-            //INotificationService notificationService,
+            INotificationService notificationService,
             ILogger<ReminderJob> logger,
             Iwpsenderservice wpsenderservice)
         {
             _unitOfWork = unitOfWork;
-            //_notificationService = notificationService;
+            _notificationService = notificationService;
             _logger = logger;
             _wpsenderservice = wpsenderservice;
         }

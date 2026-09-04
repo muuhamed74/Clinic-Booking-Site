@@ -20,19 +20,19 @@ namespace Clinic.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        //private readonly INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
         private readonly IOptions<BookingSettings> _settings;
         private readonly Iwpsenderservice _wpsenderservice;
 
         public AdminService(IUnitOfWork unitOfWork,
                             IMapper mapper,
-                            //INotificationService notificationService,
+                            INotificationService notificationService,
                             IOptions<BookingSettings> settings,
                             Iwpsenderservice wpsenderservice)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            //_notificationService = notificationService;
+            _notificationService = notificationService;
             _settings = settings;
             _wpsenderservice = wpsenderservice;
         }

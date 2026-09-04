@@ -83,7 +83,7 @@ namespace Clinic.Service
                     $"أهلا بكم في عيادة د/ أميرة محسن\n" +
                     $"موعدك يوم {formattedDate} الساعة {formattedHour}\n" +
                     $"ودورك رقم {appointment.QueueNumber}\n" +
-                    $"والمتابعة: https://amiramohsenclinic.com/info",
+                    $"ولمتابعة الدور: https://amiramohsenclinic.com/info",
 
                 NotificationType.Cancellation =>
                     $"تنويه: تم إلغاء حجز {appointment.PatientName} بعيادة د/ أميرة محسن للتأخر أو ظرف طارئ.",

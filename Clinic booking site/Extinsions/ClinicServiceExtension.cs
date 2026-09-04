@@ -44,7 +44,7 @@ namespace Clinic_booking_site.Extinsions
             services.AddScoped<ReminderJob>();
             services.AddScoped<IDoctorAnnouncementService, DoctorAnnouncementService>();
             services.AddHttpClient<Iwpsenderservice, wpsenderservice>();
-            services.AddScoped<IWhatsAppProvider, WhatsAppProvider>();
+            services.AddHttpClient<IWhatsAppProvider, WhatsAppProvider>();
 
             // For Development:
             //services.AddScoped<IMessageProvider, NewSmsProvider>();
@@ -60,10 +60,10 @@ namespace Clinic_booking_site.Extinsions
 
 
             services.Configure<WhatsAppSettings>(config.GetSection("WhatsAppSettings"));
-            services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
-            services.Configure<NotificationSettings>(config.GetSection("NotificationSettings"));
+            //services.Configure<TwilioSettings>(config.GetSection("TwilioSettings"));
+            //services.Configure<NotificationSettings>(config.GetSection("NotificationSettings"));
             services.Configure<BookingSettings>(config.GetSection("BookingSettings"));
-            services.Configure<SmsSettings>(config.GetSection("SmsSettings"));
+            //services.Configure<SmsSettings>(config.GetSection("SmsSettings"));
 
 
 

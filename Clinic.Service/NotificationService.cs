@@ -17,16 +17,17 @@ namespace Clinic.Service
     public class NotificationService : INotificationService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMessageProvider _messageProvider;
+        //private readonly IMessageProvider _messageProvider;
         private readonly NotificationSettings _notificationSettings;
 
         public NotificationService(
             IUnitOfWork unitOfWork,
-            IOptions<NotificationSettings> notificationConfig,
-             IMessageProvider whatsAppProvider)
+            IOptions<NotificationSettings> notificationConfig
+             //IMessageProvider whatsAppProvider
+            )
         {
             _unitOfWork = unitOfWork;
-            _messageProvider = whatsAppProvider;
+            //_messageProvider = whatsAppProvider;
             _notificationSettings = notificationConfig.Value;
         }
 
@@ -129,13 +130,13 @@ namespace Clinic.Service
                 _ => new()
             };
 
-            var notification = await SaveNotificationAsync(appointment.Id, $"Template {templateId}", type);
+            //var notification = await SaveNotificationAsync(appointment.Id, $"Template {templateId}", type);
 
-            await _messageProvider.SendAsync(appointment.Phone, templateId, variables);
+            //await _messageProvider.SendAsync(appointment.Phone, templateId, variables);
 
-            notification.IsSent = true;
-            notification.SentAt = DateTime.UtcNow;
-            await _unitOfWork.CompleteAsync();
+            //notification.IsSent = true;
+            //notification.SentAt = DateTime.UtcNow;
+            //await _unitOfWork.CompleteAsync();
         }
 
         private async Task<Notification> SaveNotificationAsync(int appointmentId, string message , NotificationType type)

@@ -3,20 +3,40 @@
   "WorkspaceRootPath": "E:\\Coding\\Clinic booking site\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\notifications providers\\metawhatsappprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\notifications providers\\metawhatsappprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\wpsenderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\wpsenderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\whatsappprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\whatsappprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\notificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\extinsions\\clinicserviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\extinsions\\clinicserviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|e:\\coding\\clinic booking site\\clinic.service\\bookingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5F4F6259-D5CA-4E27-BEF2-5E363C6E8666}|Clinic.Service\\Clinic.Service.csproj|solutionrelative:clinic.service\\bookingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\helpers\\hangfire\\reminderjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\helpers\\hangfire\\reminderjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|e:\\coding\\clinic booking site\\clinic booking site\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{6AD5E23C-73A1-4F4C-8E55-2DAF9E0CE2DE}|Clinic booking site\\Clinic booking site.csproj|solutionrelative:clinic booking site\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,45 +46,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Program.cs",
               "RelativeDocumentMoniker": "Clinic booking site\\Program.cs",
               "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Program.cs",
               "RelativeToolTip": "Clinic booking site\\Program.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAADgv1kAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAADwvyAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-11T14:27:51.042Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MetaWhatsAppProvider.cs",
-              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\Notifications Providers\\MetaWhatsAppProvider.cs",
-              "RelativeDocumentMoniker": "Clinic.Service\\Notifications Providers\\MetaWhatsAppProvider.cs",
-              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\Notifications Providers\\MetaWhatsAppProvider.cs*",
-              "RelativeToolTip": "Clinic.Service\\Notifications Providers\\MetaWhatsAppProvider.cs*",
-              "ViewState": "AgIAABAAAAAAAAAAAAAgwCoAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-04T22:04:41.61Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ClinicServiceExtension.cs",
-              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
-              "RelativeDocumentMoniker": "Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
-              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
-              "RelativeToolTip": "Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAgwDIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-04T22:03:23.244Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
@@ -73,16 +68,99 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "wpsenderservice.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\wpsenderservice.cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\wpsenderservice.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\wpsenderservice.cs",
+              "RelativeToolTip": "Clinic.Service\\wpsenderservice.cs",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAIwHUAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:45:14.148Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BookingService.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\BookingService.cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\BookingService.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\BookingService.cs",
+              "RelativeToolTip": "Clinic.Service\\BookingService.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAQwCUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:31:27.66Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "WhatsAppProvider.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\WhatsAppProvider.cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\WhatsAppProvider.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\WhatsAppProvider.cs",
+              "RelativeToolTip": "Clinic.Service\\WhatsAppProvider.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwBUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:22:17.449Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ReminderJob.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Helpers\\Hangfire\\ReminderJob.cs",
+              "RelativeDocumentMoniker": "Clinic booking site\\Helpers\\Hangfire\\ReminderJob.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Helpers\\Hangfire\\ReminderJob.cs",
+              "RelativeToolTip": "Clinic booking site\\Helpers\\Hangfire\\ReminderJob.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwB4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:16:55.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\AdminService.cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\AdminService.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\AdminService.cs",
+              "RelativeToolTip": "Clinic.Service\\AdminService.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwCUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:16:36.406Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "NotificationService.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic.Service\\NotificationService.cs",
+              "RelativeDocumentMoniker": "Clinic.Service\\NotificationService.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic.Service\\NotificationService.cs",
+              "RelativeToolTip": "Clinic.Service\\NotificationService.cs",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAAwIsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:15:35.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ClinicServiceExtension.cs",
+              "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
+              "RelativeDocumentMoniker": "Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
+              "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
+              "RelativeToolTip": "Clinic booking site\\Extinsions\\ClinicServiceExtension.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAuwDEAAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T22:03:23.244Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "appsettings.json",
               "DocumentMoniker": "E:\\Coding\\Clinic booking site\\Clinic booking site\\appsettings.json",
               "RelativeDocumentMoniker": "Clinic booking site\\appsettings.json",
               "ToolTip": "E:\\Coding\\Clinic booking site\\Clinic booking site\\appsettings.json",
               "RelativeToolTip": "Clinic booking site\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-04T21:49:04.335Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-04T21:49:04.335Z"
             }
           ]
         }
