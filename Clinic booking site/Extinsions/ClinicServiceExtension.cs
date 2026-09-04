@@ -47,7 +47,7 @@ namespace Clinic_booking_site.Extinsions
             services.AddScoped<IWhatsAppProvider, WhatsAppProvider>();
 
             // For Development:
-            services.AddScoped<IMessageProvider, NewSmsProvider>();
+            //services.AddScoped<IMessageProvider, NewSmsProvider>();
 
             //// For Production:
             //services.AddScoped<IWhatsAppProvider, MetaWhatsAppProvider>();
