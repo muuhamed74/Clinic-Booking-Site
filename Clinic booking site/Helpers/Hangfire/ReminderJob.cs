@@ -50,7 +50,7 @@ namespace Clinic_booking_site.Helpers.Hangfire
                     if (existingReminder != null && existingReminder.IsSent)
                         continue; 
 
-                    await _wpsenderservice.SendReminderAsync(appointment);
+                    //await _wpsenderservice.SendReminderAsync(appointment);
 
                 }
             }
